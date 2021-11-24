@@ -10,6 +10,7 @@ app = Flask(
     static_url_path='',
     static_folder='frontend/build/'
 )
+CORS(app)
 
 # REGISTER API
 app.register_blueprint(api_v1)
