@@ -29,7 +29,7 @@ const Navbar = () => {
   const open = [Boolean(anchorEl[0]), Boolean(anchorEl[1])]
     
   const handleChange = (_, newValue) => {
-    if (newValue !== routes[3]) {
+    if (newValue !== routes[3] && newValue !== routes[1]) {
       setTabValue(newValue)
     }
   }
