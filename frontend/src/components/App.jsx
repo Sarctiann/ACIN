@@ -32,27 +32,27 @@ const App = () => {
         <Routes>
 
           <Route path={'/'} element={<Navigate to={routes[0]} />} />
-          
+
           <Route path={routes[0]} element={<News />} />
-          
+
           <Route path={routes[1]} element={<Calculator />} >
-            <Route 
+            <Route
               path={sub_routes[0]} element={<CompleteCalculator />} />
-            <Route 
+            <Route
               path={sub_routes[1]} element={<BasicCalculator />} />
           </Route>
-          
+
           <Route path={routes[2]} element={<Answers />} />
-          
+
           <Route path={routes[3]} element={<Settings />} >
-            <Route 
+            <Route
               path={sub_routes[2]} element={<AnswersSettings />} />
-            <Route 
+            <Route
               path={sub_routes[3]} element={<CalculatorSettings />} />
-            <Route 
+            <Route
               path={sub_routes[4]} element={<RegexsSettings />} />
           </Route>
-        
+
         </Routes>
       </Paper>
     </ThemeProvider>
