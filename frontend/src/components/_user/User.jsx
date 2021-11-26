@@ -1,13 +1,13 @@
 import { Outlet } from 'react-router'
 import Typography from '@mui/material/Typography'
 
-const Settings = () => {
+const User = () => {
   return (
     <>
-    <Typography variant="h6" color="secondary">Settings</Typography>
+    <Typography variant="h6" color="secondary">User</Typography>
     <Outlet/>
     </>
   )
 }
 
-export default Settings;
+export default User;

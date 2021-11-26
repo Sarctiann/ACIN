@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 const Calculator = () => {
   return (
     <>
-    <Typography variant="h3" color="secondary">Calculator</Typography>
+    <Typography variant="h6" color="secondary">Calculator</Typography>
     <Outlet />
     </>
   )

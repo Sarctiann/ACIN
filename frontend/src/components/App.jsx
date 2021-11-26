@@ -4,6 +4,7 @@ import { cyan, orange } from "@mui/material/colors"
 import { Paper } from "@mui/material"
 
 import Navbar, { routes, sub_routes } from './NavBar'
+
 import News from './_news/News'
 import Calculator from './_calculator/Calculator'
 import CompleteCalculator from './_calculator/CompleteCalculator'
@@ -13,6 +14,9 @@ import Settings from './_settings/Settings'
 import AnswersSettings from './_settings/AnswersSettings'
 import CalculatorSettings from './_settings/CalculatorSettings'
 import RegexsSettings from './_settings/RegexsSettings'
+import User from './_user/User'
+import UserLogin from './_user/UserLogin'
+import UserAccount from './_user/UserAccount'
 
 
 const theme = createTheme({
@@ -51,6 +55,13 @@ const App = () => {
               path={sub_routes[3]} element={<CalculatorSettings />} />
             <Route
               path={sub_routes[4]} element={<RegexsSettings />} />
+          </Route>
+          
+          <Route path={'/user'} element={<User />} >
+            <Route
+              path={'login'} element={<UserLogin />} />
+            <Route
+              path={'account'} element={<UserAccount />} />
           </Route>
 
         </Routes>
