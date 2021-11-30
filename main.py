@@ -1,8 +1,10 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask
 from flask_cors import CORS
 
-from api import api_v1
+from _config import CONFIG
+
+from _api import api_v1
 CORS(api_v1)
 
 app = Flask(
@@ -10,19 +12,22 @@ app = Flask(
     static_url_path='',
     static_folder='frontend/build/'
 )
+
+app.config['SECRET_KEY'] = CONFIG['SECRET_KEY']
+app.config['MONGODB_SETTINGS'] = CONFIG['MONGODB_SETTINGS']
+
 CORS(app)
 
 # REGISTER API
 app.register_blueprint(api_v1)
 
 # SERVE FRONTEND
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
-    if path != "" and os.path.exists(app.static_folder + '/' + path):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
+@app.route('/', defaults={'_': None})   # CATCH ALL ROUTES
+@app.errorhandler(404)                  # ENABLE RACT ROUTES
+def serve(_):
+    # discart argument
+    return app.send_static_file('index.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

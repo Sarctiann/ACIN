@@ -4,7 +4,7 @@ import { Tab, Menu, MenuItem, Fade } from '@mui/material'
 
 const MenuTab = (props) => {
 
-  const { value, items, setTabValue, icon, label, ...others } = props
+  const { value, items, setTabValue, icon, label, disabled, ...others } = props
 
   const navigate = useNavigate()
 
@@ -33,7 +33,7 @@ const MenuTab = (props) => {
         aria-controls="aria_menu"
         onClick={handleClick}
         aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined} />
+        aria-expanded={open ? 'true' : undefined} disabled={disabled} />
       <Menu
         id="aria_menu"
         anchorEl={anchorEl}

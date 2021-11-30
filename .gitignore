@@ -2,6 +2,10 @@
 
 __pycache__/
 
+# private_config
+
+_config.py
+
 # FRONTEND
 
 # dependencies

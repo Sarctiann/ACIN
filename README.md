@@ -3,8 +3,33 @@
 
 ***
 
-SOLUCIONAR FUENTES
+Workflow:
 
+1. go to frontend folder
+
+    ```sh
+    cd frontend
+    ```
+
+2. build de react app
+
+    ```sh
+    npm run build
+    ```
+
+3. comeback to root directory
+
+    ```sh
+    cd ..
+    ```
+
+4. run flask server
+
+    ```sh
+    python3 main.py
+    ```
+
+5. go to localhost:5000
 
 ***
 

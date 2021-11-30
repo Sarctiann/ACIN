@@ -1,7 +1,13 @@
-import Typography from '@mui/material/Typography'
+import { Container, Typography } from '@mui/material';
+
 const News = () => {
   return (
-    <Typography variant="h1" color="primary">News</Typography>
+    < Container maxWidth="lg" >
+      <Typography variant="h1" color="primary">News</Typography>
+      <Typography variant="h6" color="dafault">Ideas:</Typography>
+      <li> personal remainders </li>
+      <li> global news </li>
+    </Container >
   )
 }
 
