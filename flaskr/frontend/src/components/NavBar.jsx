@@ -1,30 +1,34 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AppBar, Toolbar, Tabs, Tab } from '@mui/material'
 import { Newspaper, Calculate, ViewList, Settings } from '@mui/icons-material'
 
 import { routes, sub_routes } from './tools/routes'
+import { TokenContext } from './tools/contexts'
 import MenuTab from './MenuTab'
 import AvatarMenu from './AvatarMenu'
 
 
-const Navbar = props => {
 
+const Navbar = () => {
+
+  const { token } = useContext(TokenContext)
+  const disabled = !Boolean(token)
 
   const location = useLocation()
+
   let currentTab = false;
-  
-  switch (location.pathname.split('/')[1]) {
-    case routes[0]: 
+  switch (`/${location.pathname.split('/')[1]}`) {
+    case routes[0]:
       currentTab = routes[0]
       break;
-    case routes[1]: 
+    case routes[1]:
       currentTab = routes[1]
       break;
-    case routes[2]: 
+    case routes[2]:
       currentTab = routes[2]
       break;
-    case routes[3]: 
+    case routes[3]:
       currentTab = routes[3]
       break;
     default:
@@ -33,8 +37,6 @@ const Navbar = props => {
   }
 
   const [tabValue, setTabValue] = useState(currentTab)
-
-  const { disabled, setToken } = props
 
   const handleChange = (_, newValue) => {
     switch (newValue) {
@@ -58,7 +60,7 @@ const Navbar = props => {
 
             <Tab value={routes[0]} label='News'
               icon={<Newspaper />} iconPosition='start'
-              component={Link} to={routes[0]} disabled={disabled}/>
+              component={Link} to={routes[0]} disabled={disabled} />
 
             <MenuTab value={routes[1]} label='Calculator' icon={<Calculate />}
               setTabValue={setTabValue} items={[
@@ -80,9 +82,7 @@ const Navbar = props => {
 
           </Tabs>
 
-          <AvatarMenu 
-            userName='Sebastián Atlántico' 
-            disabled={disabled} setToken={setToken} />
+          <AvatarMenu disabled={disabled} />
 
         </Toolbar>
       </AppBar>

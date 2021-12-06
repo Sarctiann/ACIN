@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { cyan, orange } from "@mui/material/colors"
@@ -18,7 +19,7 @@ import RegexsSettings from './_settings/RegexsSettings'
 import UserLogin from './_user/UserLogin'
 import UserAccount from './_user/UserAccount'
 
-import useToken from './tools/useToken'
+import { TokenContext } from './tools/contexts'
 
 
 const theme = createTheme({
@@ -31,13 +32,12 @@ const theme = createTheme({
 
 const App = () => {
 
-  const [ token, setToken ] = useToken()
-  const disabled = !Boolean(token)
+  const { token } = useContext(TokenContext)
 
   return (
     <ThemeProvider theme={theme}>
       <Paper sx={{ height: '100vh' }} square>
-        <Navbar disabled={disabled} setToken={setToken} />
+        <Navbar />
         {(token &&
           <Routes>
 
@@ -63,12 +63,12 @@ const App = () => {
                 path={sub_routes[4]} element={<RegexsSettings />} />
             </Route>
 
-            <Route path={'login'} element={ <UserLogin setToken={setToken} />} />
+            <Route path={'login'} element={ <UserLogin />} />
             <Route path={'account'} element={<UserAccount />} />
               
           </Routes>
         ) || ( 
-          <UserLogin setToken={setToken} />
+          <UserLogin />
         )}
 
       </Paper>
