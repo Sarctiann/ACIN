@@ -1,7 +1,7 @@
 # BACKEND
 
 __pycache__/
-.env/
+.env
 
 # FRONTEND
 
