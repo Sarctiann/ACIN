@@ -19,7 +19,7 @@ import RegexsSettings from './_settings/RegexsSettings'
 import UserLogin from './_user/UserLogin'
 import UserAccount from './_user/UserAccount'
 
-import { TokenContext } from './tools/contexts'
+import { UserContext } from './tools/contexts'
 
 
 const theme = createTheme({
@@ -32,13 +32,13 @@ const theme = createTheme({
 
 const App = () => {
 
-  const { token } = useContext(TokenContext)
+  const { user } = useContext(UserContext)
 
   return (
     <ThemeProvider theme={theme}>
       <Paper sx={{ height: '100vh' }} square>
         <Navbar />
-        {(token &&
+        {(user &&
           <Routes>
 
             <Route path={'/'} element={<Navigate to={routes[0]} />} />

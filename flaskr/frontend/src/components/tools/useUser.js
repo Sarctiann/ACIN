@@ -4,8 +4,8 @@ const useUser = () => {
   
   const getUser = () => {
     const userString = localStorage.getItem('user');
-    const user = JSON.parse(userString);
-    return user
+    const userObj = JSON.parse(userString);
+    return userObj
   };
 
   const [user, setUser] = useState(getUser());

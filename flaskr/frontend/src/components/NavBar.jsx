@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Tabs, Tab } from '@mui/material'
 import { Newspaper, Calculate, ViewList, Settings } from '@mui/icons-material'
 
 import { routes, sub_routes } from './tools/routes'
-import { TokenContext } from './tools/contexts'
+import { UserContext } from './tools/contexts'
 import MenuTab from './MenuTab'
 import AvatarMenu from './AvatarMenu'
 
@@ -12,8 +12,8 @@ import AvatarMenu from './AvatarMenu'
 
 const Navbar = () => {
 
-  const { token } = useContext(TokenContext)
-  const disabled = !Boolean(token)
+  const { user } = useContext(UserContext)
+  const disabled = !Boolean(user)
 
   const location = useLocation()
 

@@ -6,14 +6,12 @@ import {
 } from '@mui/material'
 import { PersonOff as AvIcon } from '@mui/icons-material'
 
-import { UserContext, TokenContext } from './tools/contexts'
+import { UserContext } from './tools/contexts'
 
-const stringAvatar = name => {
+const stringAvatar = user => {
   
-  if (name) {
-    return name.split(' ').map(word => { 
-      return word[0] 
-    }).join('').toUpperCase()
+  if (user) {
+    return [user.first_name[0], user.last_name[0]].join('').toUpperCase()
   }
   return <AvIcon />
 }
@@ -21,7 +19,6 @@ const stringAvatar = name => {
 const AvatarMenu = props => {
 
   const { user, setUser } = useContext(UserContext)
-  const { setToken } = useContext(TokenContext)
   const { disabled, ...others } = props
   const location = useLocation()
   const navigate = useNavigate()
@@ -57,8 +54,7 @@ const AvatarMenu = props => {
   const handleLogout = () => {
     setAnchorEl(null)
     setOpenDialog(false)
-    setUser("")
-    setToken({ "token": "" })
+    setUser(undefined)
     localStorage.clear()
     navigate('/login')
   }
@@ -85,7 +81,7 @@ const AvatarMenu = props => {
         onClose={justClose}
         TransitionComponent={Fade} >
         <Typography variant='body2' color='secondary' marginX={2} mb={1} >
-          {user}
+          'repair'
         </Typography>
         <Divider />
         <MenuItem onClick={handleOptions}>

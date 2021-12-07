@@ -5,7 +5,7 @@ import {
   Typography, Button, Grid, TextField, Container, Alert, Fade
 } from '@mui/material'
 
-import { TokenContext, UserContext } from '../tools/contexts'
+import { UserContext } from '../tools/contexts'
 
 const UserLogin = () => {
 
@@ -14,7 +14,6 @@ const UserLogin = () => {
   const [loginState, setLoginState] = useState('')
 
   const { setUser } = useContext(UserContext)
-  const { setToken } = useContext(TokenContext)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -39,11 +38,9 @@ const UserLogin = () => {
           'password': uPass
         }
       )
-      console.log(res.data)
-      if (res.data['user']['token']) {
-        const full_name = `${res.data['user']['first_name']} ${res.data['user']['last_name']}`
-        setUser(full_name)
-        setToken({ 'token': res.data['user']['token'] })
+      console.log(res.data['user'])
+      if (res.data['user']) {
+        setUser(res.data['user'])
       } else {
         setUName('')
         setUPass('')

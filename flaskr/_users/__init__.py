@@ -24,12 +24,12 @@ def signin():
             return jsonify({
                 'user': {
                     'username': user.username,
-                    'password': user.username,
-                    'email': user.username,
-                    'first_name': user.username,
-                    'last_name': user.username,
-                    'is_admin': user.username,
-                    'is_active': user.username,
+                    'password': user.password,
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'is_admin': user.is_admin,
+                    'is_active': user.is_active,
                     'token': jwt.create_jwt(identity=user.username)
                 }
             })
