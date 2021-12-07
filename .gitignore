@@ -4,7 +4,7 @@ __pycache__/
 
 # private_config
 
-_config.py
+.env/
 
 # FRONTEND
 
