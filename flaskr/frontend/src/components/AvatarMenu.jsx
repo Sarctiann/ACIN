@@ -81,7 +81,7 @@ const AvatarMenu = props => {
         onClose={justClose}
         TransitionComponent={Fade} >
         <Typography variant='body2' color='secondary' marginX={2} mb={1} >
-          'repair'
+          {[user?.first_name, user?.last_name].join(' ')}
         </Typography>
         <Divider />
         <MenuItem onClick={handleOptions}>
