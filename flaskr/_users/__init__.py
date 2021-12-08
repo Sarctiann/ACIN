@@ -19,7 +19,10 @@ def signin():
         return jsonify({'msg': 'You must provide a password'})
 
     try:
-        user = Users.objects(username=data.get('username')).first()
+        user = Users.objects(
+            username=data.get('username'),
+            is_active=True
+        ).first()
         if user and check_password_hash(user.password, data.get('password')):
             return jsonify({
                 'user': {
@@ -39,15 +42,8 @@ def signin():
         return jsonify({'err': str(e)})
 
 
-@users_api_v1.post('/signup')
-def signup1():
-    return jsonify({
-        'msg': 'I must create a new user'
-    })
-
-
 @users_api_v1.get('/signup')
-def signup2():
+def signup():
     user = Users(
         username='Sarctiann',
         password=generate_password_hash('123'),
