@@ -26,13 +26,8 @@ def signin():
         if user and check_password_hash(user.password, data.get('password')):
             return jsonify({
                 'user': {
-                    'username': user.username,
-                    'password': user.password,
-                    'email': user.email,
                     'first_name': user.first_name,
                     'last_name': user.last_name,
-                    'is_admin': user.is_admin,
-                    'is_active': user.is_active,
                     'token': jwt.create_jwt(identity=user.username)
                 }
             })
@@ -56,4 +51,24 @@ def signup():
     user.save()
     return jsonify({
         'msg': 'User Created'
+    })
+
+@users_api_v1.get('/check_auth')
+@jwt.jwt_required
+def check_auth():
+
+    data = jwt.get_jwt()
+    
+    return jsonify({
+        'identity': data['sub']['identity']
+    })
+
+@users_api_v1.get('/test_jwt')
+@jwt.jwt_required
+def test_jwt_data():
+
+    data = jwt.get_jwt()
+    
+    return jsonify({
+        'JWT_DATA': data
     })

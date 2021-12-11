@@ -31,15 +31,15 @@ const UserLogin = () => {
     const path = location.pathname === '/login' ? -1 : location.pathname
 
     try {
-      const res = await axios.post(
+      let res = await axios.post(
         'http://localhost:5000/api-v1/users/signin',
         {
           'username': uName,
           'password': uPass
         }
       )
-      console.log(res.data['user'])
       if (res.data['user']) {
+        res.data['user']['username'] = uName
         setUser(res.data['user'])
       } else {
         setUName('')
@@ -49,6 +49,8 @@ const UserLogin = () => {
           setLoginState('')
         }, 2500);
       }
+      console.log(res.data['user'])
+      console.log(res.headers)
     }
     catch (error) {
       console.log(error)

@@ -4,16 +4,17 @@ import { AppBar, Toolbar, Tabs, Tab } from '@mui/material'
 import { Newspaper, Calculate, ViewList, Settings } from '@mui/icons-material'
 
 import { routes, sub_routes } from './tools/routes'
-import { UserContext } from './tools/contexts'
+import { AuthContext } from './tools/contexts'
 import MenuTab from './MenuTab'
 import AvatarMenu from './AvatarMenu'
+import NavMenu from './NavMenu'
 
 
 
 const Navbar = () => {
 
-  const { user } = useContext(UserContext)
-  const disabled = !Boolean(user)
+  const { auth } = useContext(AuthContext)
+  const disabled = !Boolean(auth)
 
   const location = useLocation()
 
@@ -53,7 +54,10 @@ const Navbar = () => {
     <>
       <AppBar position='sticky'>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Tabs
+
+          <NavMenu setTabValue={setTabValue} disabled={disabled} />
+
+          <Tabs sx={{ visibility: { xs: 'hidden', sm: 'visible' } }}
             indicatorColor='primary'
             onChange={handleChange}
             value={tabValue}>
@@ -83,7 +87,6 @@ const Navbar = () => {
           </Tabs>
 
           <AvatarMenu disabled={disabled} />
-
         </Toolbar>
       </AppBar>
     </>

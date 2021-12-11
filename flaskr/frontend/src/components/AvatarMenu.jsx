@@ -9,7 +9,7 @@ import { PersonOff as AvIcon } from '@mui/icons-material'
 import { UserContext } from './tools/contexts'
 
 const stringAvatar = user => {
-  
+
   if (user) {
     return [user.first_name[0], user.last_name[0]].join('').toUpperCase()
   }
@@ -55,7 +55,7 @@ const AvatarMenu = props => {
     setAnchorEl(null)
     setOpenDialog(false)
     setUser(undefined)
-    localStorage.clear()
+    localStorage.removeItem('user')
     navigate('/login')
   }
 

@@ -1,9 +1,11 @@
-import { useMemo, createContext } from "react";
+import { useMemo, createContext, useState } from "react";
 import useUser from './useUser'
 
 // 1. Create and export contexts
 export const UserContext = createContext(
-    { user: "", setUser: () => { } })
+    { user: '', setUser: () => { } })
+export const AuthContext = createContext(
+    { auth: '', setAuth: () => { } })
 // -----------------------------
 
 const GlobalContext = ({ children }) => {
@@ -14,13 +16,20 @@ const GlobalContext = ({ children }) => {
         () => ({ user, setUser }),
         [user, setUser]
     );
+    const [auth, setAuth] = useState(false);
+    const authValue = useMemo(
+        () => ({ auth, setAuth }),
+        [auth, setAuth]
+    );
     // ----------------------------------------
 
     return (
 
         // 3. Provide the contexts
         <UserContext.Provider value={userValue}>
-            {children}
+            <AuthContext.Provider value={authValue}>
+                {children}
+            </AuthContext.Provider>
         </UserContext.Provider>
         // -----------------------
     )
