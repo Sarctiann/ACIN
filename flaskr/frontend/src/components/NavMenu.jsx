@@ -48,6 +48,7 @@ const NavMenu = props => {
     <>
       <IconButton aria-label="Go to..." onClick={handleClick} {...others}
         sx={{ display: { xs: 'inline-flex', sm: 'none' } }}
+        disabled={disabled}
       >
         <MI />
       </IconButton>
