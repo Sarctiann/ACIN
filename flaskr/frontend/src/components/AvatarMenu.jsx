@@ -6,7 +6,7 @@ import {
 } from '@mui/material'
 import { PersonOff as AvIcon } from '@mui/icons-material'
 
-import { UserContext } from './tools/contexts'
+import { UserContext, AuthContext } from './tools/contexts'
 
 const stringAvatar = user => {
 
@@ -19,6 +19,7 @@ const stringAvatar = user => {
 const AvatarMenu = props => {
 
   const { user, setUser } = useContext(UserContext)
+  const { setAuth } = useContext(AuthContext)
   const { disabled, ...others } = props
   const location = useLocation()
   const navigate = useNavigate()
@@ -55,6 +56,7 @@ const AvatarMenu = props => {
     setAnchorEl(null)
     setOpenDialog(false)
     setUser(undefined)
+    setAuth(false)
     localStorage.removeItem('user')
     navigate('/login')
   }
