@@ -1,4 +1,5 @@
 import os
+import datetime as dt
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 JWT_SECRET_KEY = SECRET_KEY
@@ -15,3 +16,4 @@ MONGODB_SETTINGS = {
     'authentication_source': os.environ.get('MONGODB_SOURCE'),
     'authentication_mechanism': os.environ.get('MONGODB_AUTH_MECH')
 }
+JWT_EXPIRES = dt.timedelta(hours=24)

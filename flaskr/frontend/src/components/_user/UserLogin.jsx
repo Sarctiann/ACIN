@@ -50,7 +50,6 @@ const UserLogin = () => {
         }, 2500);
       }
       console.log(res.data['user'])
-      console.log(res.headers)
     }
     catch (error) {
       console.log(error)

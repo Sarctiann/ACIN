@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IconButton, Menu, MenuItem, Fade, Divider } from '@mui/material'
-import { Newspaper, Calculate, ViewList, Settings } from '@mui/icons-material'
+import {
+  IconButton, Menu, MenuItem, Fade, Divider, ListItemIcon
+} from '@mui/material'
+import {
+  Newspaper, Calculate, ViewList, Settings, ArrowForwardIos
+} from '@mui/icons-material'
 import { Menu as MI } from '@mui/icons-material'
 
 import { routes, sub_routes } from './tools/routes'
@@ -69,6 +73,9 @@ const NavMenu = props => {
             return (
               <MenuItem
                 onClick={() => { handleClose(item.route) }} key={item.label}>
+                <ListItemIcon>
+                  <ArrowForwardIos />
+                </ListItemIcon>
                 {item.label}
               </MenuItem>
             )

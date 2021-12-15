@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime as dt
 from flask import current_app
 from flask_mongoengine import MongoEngine
 import flask_jwt_simple as jwt
@@ -14,9 +14,9 @@ JWT = jwt.JWTManager()
 
 @JWT.jwt_data_loader
 def add_claims_to_access_token(identity):
-    user = Users.objects(username=identity, is_active=True).first()
+    user = Users.objects(username=identity).first()
 
-    now = datetime.utcnow()
+    now = dt.datetime.utcnow()
     return {
         'exp': now + current_app.config['JWT_EXPIRES'],
         'iat': now,

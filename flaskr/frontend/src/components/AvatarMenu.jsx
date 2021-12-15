@@ -1,10 +1,11 @@
 import { useState, useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
-  IconButton, Avatar, Menu, MenuItem, Typography, Divider, Fade,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button
+  IconButton, Avatar, Menu, MenuItem, Typography, Divider, Fade, Button,
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  ListItemIcon
 } from '@mui/material'
-import { PersonOff as AvIcon } from '@mui/icons-material'
+import { PersonOff as AvIcon, Person, Logout } from '@mui/icons-material'
 
 import { UserContext, AuthContext } from './tools/contexts'
 
@@ -82,14 +83,23 @@ const AvatarMenu = props => {
         open={openMenu}
         onClose={justClose}
         TransitionComponent={Fade} >
-        <Typography variant='body2' color='secondary' marginX={2} mb={1} >
+        <Typography variant='overline' color='secondary' marginX={2} mb={1} >
           {[user?.first_name, user?.last_name].join(' ')}
+        </Typography>
+        <Typography variant='subtitle1' color='GrayText' marginX={2} mb={1} >
+          {user?.email}
         </Typography>
         <Divider />
         <MenuItem onClick={handleOptions}>
+          <ListItemIcon>
+            <Person />
+          </ListItemIcon>
           Options
         </MenuItem>
         <MenuItem onClick={handleOpenDialog}>
+          <ListItemIcon>
+            <Logout />
+          </ListItemIcon>
           Logout
         </MenuItem>
       </Menu>

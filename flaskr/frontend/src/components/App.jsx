@@ -34,7 +34,7 @@ const theme = createTheme({
 const check_identity = async (user, setAuth) => {
   try {
     const res = await axios.get(
-      'http://localhost:5000/api-v1/users/check_auth',
+      'http://localhost:5000/api-v1/users/check-auth',
       {
         headers: {
           'Accept': '*/*',
@@ -66,7 +66,7 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      console.log('Checking Auth...')
+      // console.log('Checking Auth...')
       check_identity(user, setAuth)
     }
   }, [user, setAuth])
