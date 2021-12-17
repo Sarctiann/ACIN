@@ -14,3 +14,9 @@ export const sub_routes = [
     'calculator',
     'regexs'
   ]
+
+const host = 'http://localhost:5000'
+
+const api_root = '/api-v1'
+
+export const api_url = host + api_root

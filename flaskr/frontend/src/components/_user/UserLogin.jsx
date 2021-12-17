@@ -6,6 +6,7 @@ import {
 } from '@mui/material'
 
 import { UserContext } from '../tools/contexts'
+import { api_url } from '../tools/routes'
 
 const UserLogin = () => {
 
@@ -32,15 +33,14 @@ const UserLogin = () => {
 
     try {
       let res = await axios.post(
-        'http://localhost:5000/api-v1/users/signin',
+        api_url + '/users/signin',
         {
           'username': uName,
           'password': uPass
         }
       )
       if (res.data['user']) {
-        res.data['user']['username'] = uName
-        setUser(res.data['user'])
+        setUser({ ...res.data['user'], username: uName })
       } else {
         setUName('')
         setUPass('')
@@ -49,7 +49,7 @@ const UserLogin = () => {
           setLoginState('')
         }, 2500);
       }
-      console.log(res.data['user'])
+      // console.log(res.data['user'])
     }
     catch (error) {
       console.log(error)

@@ -1,52 +1,60 @@
-import { Fragment, useContext, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import {
-  Grid, Typography, Paper, TextField, Button, Switch, FormControlLabel
+  Grid, Typography, Paper, TextField, Button, Switch, FormControlLabel,
+  Fade, Alert
 } from '@mui/material'
 import axios from 'axios'
 
-import { UserContext } from '../tools/contexts'
+import { api_url } from '../tools/routes'
+import RDialog from '../tools/ReusableDialog'
 
-
-const getUserData = async (user, setUserData) => {
-  try {
-    const res = await axios.get(
-      'http://localhost:5000/api-v1/users/get-user-data',
-      {
-        headers: {
-          'Accept': '*/*',
-          'Authorization': `Bearer ${user['token']}`
-        }
-      }
-    )
-    setUserData({
-      password: '',
-      new_password: '',
-      confirm_new_password: '',
-      ...res.data
-    })
-  }
-  catch (error) {
-    console.log(error)
-  }
-}
 
 const UpdateUserForm = (props) => {
 
-  const [userData, setUserData] = useState({
+  const { user, setUser, ...others } = props
+
+  const initialUser = {
     username: '',
+    email:'',
     password: '',
     new_password: '',
     confirm_new_password: '',
-    email: '',
     first_name: '',
     last_name: '',
     is_admin: false
-  })
-
-  const { user } = useContext(UserContext)
+  }
+  const [userData, setUserData] = useState(initialUser)
 
   useEffect(() => {
-    getUserData(user, setUserData)
+    const source = axios.CancelToken.source()
+    if (user?.token) {
+      (async () => {
+        try {
+          const res = await axios.get(
+            api_url + '/users/get-user-data',
+            {
+              cancelToken: source.token,
+              headers: {
+                'Accept': '*/*',
+                'Authorization': `Bearer ${user['token']}`
+              }
+            }
+          )
+          setUserData({
+            password: '',
+            new_password: '',
+            confirm_new_password: '',
+            ...res.data
+          })
+        }
+        catch (error) {
+          console.log(error)
+        }
+      })()
+    }
+    return () => {
+      source.cancel()
+    }
   }, [user])
 
   const handleChangeUser = (e) => {
@@ -79,20 +87,82 @@ const UpdateUserForm = (props) => {
     }
   }
 
-  const handleUpdateUser = (e) => {
-    e.preventDefault()
-    console.log(userData)
+  const [updateState, setUpdateState] = useState({ msg: '', vnt: 'info' })
+  const handleUpdateUser = () => {
+    if (!samePassword) {
+      setUpdateState({ msg: "new password doesn't match", vnt: 'error' })
+      setTimeout(() => {
+        setUpdateState({ msg: '', vnt: 'error' })
+      }, 2500);
+      return
+    }
+
+    (async () => {
+      try {
+        const res = await axios.post(
+          api_url + '/users/update-user',
+          userData,
+          {
+            headers: {
+              'Accept': '*/*',
+              'Authorization': `Bearer ${user['token']}`
+            }
+          }
+        )
+        if (res.data['msg']) {
+          setUpdateState({ msg: res.data['msg'], vnt: 'success' })
+          const resultUser = {
+            ...user,
+            username: userData['username'],
+            first_name: userData['first_name'],
+            last_name: userData['last_name'],
+            is_admin: userData['is_admin']
+          }
+          setTimeout(() => {
+            setUpdateState({ msg: '', vnt: 'success' })
+          }, 2500)
+          if (res.data['wrn']) {
+            setTimeout(() => {
+              setUpdateState({ msg: res.data['wrn'], vnt: 'warning' })
+            }, 2600)
+            setTimeout(() => {
+              setUpdateState({ msg: '', vnt: 'warning' })
+              setUser(resultUser)
+            }, 5100)
+          } else {
+            setUser(resultUser)
+          }
+        } else {
+          setUpdateState({ msg: res.data['err'], vnt: 'error' })
+          setTimeout(() => {
+            setUpdateState({ msg: '', vnt: 'error' })
+          }, 2500)
+        }
+      }
+      catch (error) {
+        console.log(error)
+      }
+    })()
+
+    setTimeout(() => {
+      setSamePassword(true)
+    }, 500);
   }
 
 
   return (
-    <Fragment {...props}>
+    <Fragment {...others}>
       <Grid item xs={12} md={4}>
         <Paper elevation={3}>
-          <Grid container spacing={2} margin={0} p={{ xs: 0, md: 3 }}>
+          <Grid container spacing={2} margin={0} px={{ xs: 0, md: 3 }}>
             <Grid item>
               <Typography variant="h6" color="primary">
                 Update My User Account
+              </Typography>
+            </Grid>
+            <Grid item xs={12} mx={1}>
+              <Typography variant='h6' color='GrayText'>
+                {userData['email']}
               </Typography>
             </Grid>
             <Grid item>
@@ -165,19 +235,29 @@ const UpdateUserForm = (props) => {
                     onChange={handleChangeUser}
                   />
                 </Grid>
-                <Grid item px={2} pb={2}>
-                  <Button variant="contained" color="warning"
-                    onClick={handleUpdateUser}
-                  >
-                    UPDATE
-                  </Button>
-                </Grid>
+                <RDialog
+                  title='Update User' message='Confirm user update?'
+                  confirmText='UPDATE' action={handleUpdateUser}
+                >
+                  <Grid item px={2} pb={2}>
+                    <Button variant="contained" color="warning">
+                      UPDATE
+                    </Button>
+                  </Grid>
+                </RDialog>
+              </Grid>
+              <Grid item pb={2}>
+                <Fade in={Boolean(updateState['msg'])} timeout={1000}>
+                  <Alert severity={updateState['vnt']} variant='outlined'>
+                    {updateState['msg']}
+                  </Alert>
+                </Fade>
               </Grid>
             </Grid>
           </Grid>
         </Paper>
-      </Grid>
-    </Fragment>
+      </Grid >
+    </Fragment >
   )
 }
 

@@ -1,42 +1,15 @@
 # 🌐 ACIN
-## Audiocenter Intranet
+## audiocenter intranet
 
 ***
 
-Workflow:
+This project consists of a small application to solve the need for communication between the stores of a company.
 
-1. go to frontend folder
+for its implementation I chose 
 
-    ```sh
-    cd frontend
-    ```
-
-2. build de react app
-
-    ```sh
-    npm run build
-    ```
-
-3. comeback to root directory
-
-    ```sh
-    cd ..
-    ```
-
-4. run flask server
-
-    ```sh
-    python3 main.py
-    ```
-
-5. go to localhost:5000
-
-***
-
-> Project specifications:   
-> + Api backend made on Python Flask
-> + Data base made on mongoDB
-> + Site Frontend made on React
++ Python Flask for the backend
++ mongoDB for database
++ and React with MUI for the frontend
 
 
 ***

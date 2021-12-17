@@ -28,6 +28,7 @@ def signin():
                     'first_name': user.first_name,
                     'last_name': user.last_name,
                     'email': user.email,
+                    'is_admin': user.is_admin,
                     'token': jwt.create_jwt(identity=user.username)
                 }
             })
@@ -53,7 +54,9 @@ def check_auth():
 def get_user_data():
 
     username = jwt.get_jwt()['sub']['identity']
+
     user = Users.objects(username=username).first()
+    if not user: return jsonify({'err': 'No logged user!'})
 
     return jsonify({
         'username': username,
@@ -71,24 +74,26 @@ def signuupdate_user():
     identity = jwt.get_jwt()['sub']
 
     data = request.get_json()
+    if not data:
+        return jsonify({
+            'err': f"User NOT Updated: JSON body was not provided"
+        })
+
     user = Users.objects(username=identity.get('identity')).first()
-    if data:
+    if user and check_password_hash(user.password, data.get('password', '')):
         msg = {}
         try:
-            msg['Updated'] = user.update(
-                username=data.get('username', user.username),
-                email=data.get('email', user.email),
+            user.update(
                 first_name=data.get('first_name', user.first_name),
                 last_name=data.get('last_name', user.last_name),
                 is_admin=data.get('is_admin', user.is_admin)
             )
-            if (usr := data.get('username')):
-                msg['username_changed'] = user.update( username=usr)
-                msg['warning'] = 'You need to login with the new credentials'
-            if (pss := data.get('password')):
-                msg['password_changed'] = user.update(
-                    password=generate_password_hash(pss)
-                )
+            msg['msg'] = 'User Updated'
+            if (usr := data.get('username')) != user.username:
+                user.update(username=usr)
+                msg['wrn'] = 'You need to login with the new credentials'
+            if (pss := data.get('new_password')):
+                user.update(password=generate_password_hash(pss))
             return jsonify(msg)
 
         except Exception as e:
@@ -97,7 +102,7 @@ def signuupdate_user():
             })
     else:
         return jsonify({
-            'err': f"User NOT Updated: JSON body was not provided"
+            'err': 'Invalid Credentials'
         })
 
 
@@ -114,15 +119,15 @@ def signup():
             try:
                 user = Users(
                     username=data.get('username'),
-                    password=generate_password_hash(data.get('password')),
+                    password=generate_password_hash('abc123'),
                     email=data.get('email'),
                     first_name=data.get('first_name'),
                     last_name=data.get('last_name'),
                     is_admin=data.get('is_admin')
                 )
-                msg = user.save()
+                user.save()
                 return jsonify({
-                    'user_created': msg
+                    'msg': 'user_created'
                 })
             except Exception as e:
                 return jsonify({
@@ -169,16 +174,14 @@ def signuupdate_other_user():
         user = Users.objects(email=data.get('email')).first()
         if user:
             try:
-                msg = user.update(
+                user.update(
                     username=data.get('username'),
-                    password=generate_password_hash(data.get('password')),
-                    email=data.get('email'),
                     first_name=data.get('first_name'),
                     last_name=data.get('last_name'),
                     is_admin=data.get('is_admin')
                 )
                 return jsonify({
-                    'user_updated': msg
+                    'msg': 'User Updated'
                 })
             except Exception as e:
                 return jsonify({
@@ -202,12 +205,12 @@ def delete_other_user():
 
     if is_admin:
         data = request.get_json()
-        user = Users.objects(username=data.get('username')).first()
+        user = Users.objects(email=data.get('email')).first()
         if user:
             try:
-                msg = user.delete()
+                user.delete()
                 return jsonify({
-                    'user_deleted': msg
+                    'msg': 'User Deleted'
                 })
             except Exception as e:
                 return jsonify({
@@ -215,9 +218,9 @@ def delete_other_user():
                 })
         else:
             return jsonify({
-                'err': f"User NOT Created: User do not exist"
+                'err': f"User NOT Deleted: User do not exist"
             })
     else:
         return jsonify({
-            'err': f"User NOT Created: Not permission to perform this operation"
+            'err': f"User NOT Deleted: Not permission to perform this operation"
         })

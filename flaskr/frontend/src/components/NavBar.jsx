@@ -86,7 +86,7 @@ const Navbar = () => {
 
           </Tabs>
 
-          <AvatarMenu disabled={disabled} />
+          <AvatarMenu setTabValue={setTabValue} disabled={disabled} />
         </Toolbar>
       </AppBar>
     </>

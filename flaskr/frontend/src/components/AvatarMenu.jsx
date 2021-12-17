@@ -1,13 +1,12 @@
 import { useState, useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
-  IconButton, Avatar, Menu, MenuItem, Typography, Divider, Fade, Button,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  ListItemIcon
+  IconButton, Avatar, Menu, MenuItem, Typography, Divider, Fade, ListItemIcon
 } from '@mui/material'
 import { PersonOff as AvIcon, Person, Logout } from '@mui/icons-material'
 
 import { UserContext, AuthContext } from './tools/contexts'
+import RDialog from './tools/ReusableDialog'
 
 const stringAvatar = user => {
 
@@ -21,7 +20,7 @@ const AvatarMenu = props => {
 
   const { user, setUser } = useContext(UserContext)
   const { setAuth } = useContext(AuthContext)
-  const { disabled, ...others } = props
+  const { setTabValue, disabled, ...others } = props
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -33,11 +32,9 @@ const AvatarMenu = props => {
 
   const [anchorEl, setAnchorEl] = useState(null)
   const openMenu = Boolean(anchorEl)
-  const [openDialog, setOpenDialog] = useState(false)
 
   const justClose = () => {
     setAnchorEl(null)
-    setOpenDialog(false)
   }
 
   const handleClick = e => {
@@ -46,16 +43,12 @@ const AvatarMenu = props => {
 
   const handleOptions = () => {
     setAnchorEl(null)
+    setTabValue(false)
     navigate('/account')
-  }
-
-  const handleOpenDialog = () => {
-    setOpenDialog(true)
   }
 
   const handleLogout = () => {
     setAnchorEl(null)
-    setOpenDialog(false)
     setUser(undefined)
     setAuth(false)
     localStorage.removeItem('user')
@@ -96,35 +89,20 @@ const AvatarMenu = props => {
           </ListItemIcon>
           Options
         </MenuItem>
-        <MenuItem onClick={handleOpenDialog}>
-          <ListItemIcon>
-            <Logout />
-          </ListItemIcon>
-          Logout
-        </MenuItem>
+        <RDialog
+          title='LOGOUT' message='Confirm logout?'
+          confirmText='Logout' action={handleLogout}
+        >
+          <MenuItem>
+            <ListItemIcon>
+              <Logout />
+            </ListItemIcon>
+            Logout
+          </MenuItem>
+        </RDialog>
       </Menu>
 
-      <Dialog
-        open={openDialog}
-        onClose={justClose}
-        aria-labelledby="title"
-        aria-describedby="description"
-      >
-        <DialogTitle id="title">
-          LOGOUT
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="description">
-            Do you confirm logout?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={justClose}>
-            Cancel </Button>
-          <Button onClick={handleLogout} color='error' autoFocus>
-            Logout </Button>
-        </DialogActions>
-      </Dialog>
+
     </>
   )
 }

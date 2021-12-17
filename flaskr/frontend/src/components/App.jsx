@@ -6,7 +6,7 @@ import { Paper } from "@mui/material"
 import axios from 'axios'
 
 import Navbar from './NavBar'
-import { routes, sub_routes } from './tools/routes'
+import { routes, sub_routes, api_url } from './tools/routes'
 
 import News from './_news/News'
 import Calculator from './_calculator/Calculator'
@@ -31,33 +31,6 @@ const theme = createTheme({
   }
 })
 
-const check_identity = async (user, setAuth) => {
-  try {
-    const res = await axios.get(
-      'http://localhost:5000/api-v1/users/check-auth',
-      {
-        headers: {
-          'Accept': '*/*',
-          'Authorization': `Bearer ${user['token']}`
-        }
-      }
-    )
-    if (res && user['username'] === res.data['identity']) {
-      setAuth(true)
-    } else {
-      setAuth(false)
-    }
-  }
-  catch (error) {
-    const errCode = error.response?.status
-    if (errCode === 422 || errCode === 401) {
-      console.log('NOT AUTHORIZED', errCode)
-      setAuth(false)
-    } else {
-      console.log(error)
-    }
-  }
-}
 
 const App = () => {
 
@@ -65,9 +38,34 @@ const App = () => {
   const { auth, setAuth } = useContext(AuthContext)
 
   useEffect(() => {
-    if (user) {
-      // console.log('Checking Auth...')
-      check_identity(user, setAuth)
+    if (user?.token) {
+      (async () => {
+        try {
+          const res = await axios.get(
+            api_url + '/users/check-auth',
+            {
+              headers: {
+                'Accept': '*/*',
+                'Authorization': `Bearer ${user['token']}`
+              }
+            }
+          )
+          if (res && user['username'] === res.data['identity']) {
+            setAuth(true)
+          } else {
+            setAuth(false)
+          }
+        }
+        catch (error) {
+          const errCode = error.response?.status
+          if (errCode === 422 || errCode === 401) {
+            setAuth(false)
+            console.log('NOT AUTHORIZED', errCode)
+          } else {
+            console.log(error)
+          }
+        }
+      })()
     }
   }, [user, setAuth])
 
@@ -76,7 +74,7 @@ const App = () => {
 
       <Paper sx={{ paddingBlockEnd: 2, minHeight: '100vh' }} square>
         <Navbar />
-        {(auth &&
+        {(auth ?
           <Routes>
 
             <Route path={'/'} element={<Navigate to={routes[0]} />} />
@@ -105,9 +103,9 @@ const App = () => {
             <Route path={'account'} element={<UserAccount />} />
 
           </Routes>
-        ) || (
-            <UserLogin />
-          )}
+          :
+          <UserLogin />
+        )}
 
       </Paper>
     </ThemeProvider>

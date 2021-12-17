@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import {
   Container, Grid, Typography,
 } from '@mui/material'
 
+import { UserContext } from '../tools/contexts'
 import UpdateUserForm from './UpdateUserFrom'
 import OtherUsersList from './OtherUsersList'
 import CreateUpdateOtherUser from './CreateUpdateOtherUser'
@@ -10,8 +11,9 @@ import CreateUpdateOtherUser from './CreateUpdateOtherUser'
 
 const UserAccount = () => {
 
-  const [edit, setEdit] = useState(false)
-  const [otherUserData, setOtherUserData] = useState({
+  const { user, setUser } = useContext(UserContext)
+
+  const initialOtherUser = {
     username: '',
     password: '',
     email: '',
@@ -19,7 +21,11 @@ const UserAccount = () => {
     first_name: '',
     last_name: '',
     is_admin: false
-  })
+  }
+
+  const [edit, setEdit] = useState(false)
+  const [otherUserData, setOtherUserData] = useState(initialOtherUser)
+  const [usersSate, setUsersState] = useState({ msg: '', vnt: 'success' })
 
   return (
     <Container maxWidth='xl'>
@@ -27,19 +33,32 @@ const UserAccount = () => {
         <Typography variant="h3" color="secondary">User Account</Typography>
       </Grid>
       <Grid container spacing={3}>
-        <UpdateUserForm />
-        
-        <OtherUsersList 
-          setEdit={setEdit} 
-          setOtherUserData={setOtherUserData}
+
+        <UpdateUserForm 
+          user={user}
+          setUser={setUser}
         />
-        
-        <CreateUpdateOtherUser 
-          edit={edit}
-          setEdit={setEdit}
-          otherUserData={otherUserData}
-          setOtherUserData={setOtherUserData}
-        />
+
+        {user.is_admin && <>
+          <OtherUsersList
+            user={user}
+            setEdit={setEdit}
+            usersSate={usersSate} 
+            setUsersState={setUsersState}
+            initialOtherUser={initialOtherUser}
+            setOtherUserData={setOtherUserData}
+            />
+
+          <CreateUpdateOtherUser
+            user={user}
+            edit={edit}
+            setEdit={setEdit} 
+            setUsersState={setUsersState}
+            initialOtherUser={initialOtherUser}
+            otherUserData={otherUserData}
+            setOtherUserData={setOtherUserData}
+          />
+        </>}
 
       </Grid>
     </Container >

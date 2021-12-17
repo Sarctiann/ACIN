@@ -2,11 +2,18 @@ import { Fragment, useState } from 'react'
 import {
   Grid, Typography, Paper, TextField, Button, Switch, FormControlLabel
 } from '@mui/material'
+import axios from 'axios'
+
+import { api_url } from '../tools/routes'
+import RDialog from '../tools/ReusableDialog'
 
 
 const CreateUpdateOtherUser = (props) => {
 
-  const { edit, setEdit, otherUserData, setOtherUserData, ...others } = props
+  const {
+    user, edit, setEdit, setUsersState, initialOtherUser,
+    otherUserData, setOtherUserData, ...others
+  } = props
 
   const handleChangeOtherUser = (e) => {
     const { name, value, checked } = e.target
@@ -38,27 +45,113 @@ const CreateUpdateOtherUser = (props) => {
     }
   }
 
-  const handleUpdateOtherUser = (e) => {
-    e.preventDefault()
-    console.log(otherUserData)
+  const handleCreateOtherUser = () => {
+    for (let [field, value] of Object.entries(
+      (({ email, username, first_name, last_name, is_admin }) => (
+        { email, username, first_name, last_name, is_admin }
+      ))(otherUserData)
+    )) {
+      if (value === '') {
+        setUsersState({ msg: `Missing Value ${field}`, vnt: 'error' })
+        setTimeout(() => {
+          setUsersState({ msg: '', vnt: 'error' })
+        }, 2500);
+        return
+      }
+    }
+    if (!sameEmail) {
+      setUsersState({ msg: "Email doesn't match", vnt: 'error' })
+      setTimeout(() => {
+        setUsersState({ msg: '', vnt: 'error' })
+      }, 2500);
+      return
+    }
+    (async () => {
+      try {
+        const res = await axios.post(
+          api_url + '/users/signup',
+          otherUserData,
+          {
+            headers: {
+              'Accept': '*/*',
+              'Authorization': `Bearer ${user['token']}`
+            }
+          }
+        )
+        if (res.data['msg']) {
+          setUsersState({ msg: res.data['msg'], vnt: 'success' })
+          setOtherUserData(initialOtherUser)
+          setTimeout(() => {
+            setUsersState({ msg: '', vnt: 'success' })
+          }, 2500)
+        } else {
+          setUsersState({ msg: res.data['err'], vnt: 'error' })
+          setTimeout(() => {
+            setUsersState({ msg: '', vnt: 'error' })
+          }, 2500)
+        }
+      }
+      catch (error) {
+        console.log(error)
+      }
+    })()
+
+    setTimeout(() => {
+      setSameEmail(true)
+    }, 500);
+  }
+
+  const handleUpdateOtherUser = () => {
+    (async () => {
+      try {
+        const res = await axios.post(
+          api_url + '/users/update-other-user',
+          (({ email, username, first_name, last_name, is_admin }) => (
+            { email, username, first_name, last_name, is_admin }
+          ))(otherUserData),
+          {
+            headers: {
+              'Accept': '*/*',
+              'Authorization': `Bearer ${user['token']}`
+            }
+          }
+        )
+        if (res.data['msg']) {
+          setUsersState({ msg: res.data['msg'], vnt: 'success' })
+          setTimeout(() => {
+            setUsersState({ msg: '', vnt: 'success' })
+          }, 2500)
+        } else {
+          setUsersState({ msg: res.data['err'], vnt: 'error' })
+          setTimeout(() => {
+            setUsersState({ msg: '', vnt: 'error' })
+          }, 2500)
+        }
+      }
+      catch (error) {
+        console.log(error)
+      }
+    })()
     setEdit(false)
   }
 
-  const handleCancelEditUser = (e) => {
+  const handleCancelEditUser = () => {
+    setOtherUserData(initialOtherUser)
     setEdit(false)
+    setSameEmail(true)
   }
 
   return (
     <Fragment {...others}>
       <Grid item xs={12} md={4}>
         <Paper elevation={3}>
-          <Grid container spacing={2} margin={0} p={{ xs: 0, md: 3 }}>
+          <Grid container spacing={2} margin={0} px={{ xs: 0, md: 3 }}>
             <Grid item>
               <Typography variant="h6" color="primary">
                 Update My User Account
               </Typography>
             </Grid>
-            {!edit && <>
+            {!edit ? <>
               <Grid item>
                 <Paper elevation={1} sx={{
                   background: 'darkGray2',
@@ -82,7 +175,13 @@ const CreateUpdateOtherUser = (props) => {
                   </Grid>
                 </Paper>
               </Grid>
-            </>}
+            </> :
+              <Grid item xs={12} mx={1}>
+                <Typography variant='h6' color='GrayText'>
+                  {otherUserData['email']}
+                </Typography>
+              </Grid>
+            }
             <Grid item>
               <TextField size='small'
                 name='username'
@@ -118,66 +217,57 @@ const CreateUpdateOtherUser = (props) => {
                 onChange={handleChangeOtherUser}
               />
             </Grid>
-
-
             <Grid item>
               <Grid container columns={2} sx={{ alignItems: 'flex-end' }}>
-
-
-                {
-                  edit ?
-                    <>
-                      <Grid item pl={2} pb={2}>
-                        <Button variant="contained" color="error"
-                          onClick={handleCancelEditUser}
+                {edit ? <>
+                  <Grid item pl={2} pb={2}>
+                    <Button variant="contained" color="error"
+                      onClick={handleCancelEditUser}
+                    >
+                      CANCEL
+                    </Button>
+                  </Grid>
+                  <RDialog title='Update Other User'
+                    message='Confirm user update?'
+                    confirmText='UPDATE' action={handleUpdateOtherUser}
+                  >
+                    <Grid item pl={2} pb={2}>
+                      <Button variant="contained" color="warning">
+                        UPDATE
+                      </Button>
+                    </Grid>
+                  </RDialog>
+                </> : <>
+                  <Grid item pb={2}>
+                    <Paper elevation={1} sx={{
+                      maxWidth: '230px',
+                      background: 'darkGray2',
+                      display: 'inline-block'
+                    }}>
+                      <Grid item p={2}>
+                        <Typography variant="body1"
+                          color="warning.main"
                         >
-                          CANCEL
-                        </Button>
+                          By default the password will be "abc123"
+                          the user must change it later
+                        </Typography>
                       </Grid>
-                      <Grid item pl={2} pb={2}>
-                        <Button variant="contained" color="warning"
-                          onClick={handleUpdateOtherUser}
-                        >
-                          UPDATE
-                        </Button>
-                      </Grid>
-                    </>
-                    :
-                    <>
-                      <Grid item>
-                        <Paper elevation={1} sx={{
-                          maxWidth: '230px',
-                          background: 'darkGray2',
-                          display: 'inline-block'
-                        }}>
-                          <Grid item p={2}>
-                            <Typography variant="body1"
-                              color="warning.main"
-                            >
-                              By default the password will be "abc123"
-                              the user must change it later
-                            </Typography>
-                          </Grid>
-                        </Paper>
-                      </Grid>
-                      <Grid item px={2} py={2}>
-                        <Button variant="contained" color="success"
-                          onClick={handleUpdateOtherUser}
-                        >
-                          CREATE
-                        </Button>
-                      </Grid>
-                    </>
-                }
-
+                    </Paper>
+                  </Grid>
+                  <Grid item px={2} pb={2}>
+                    <Button variant="contained" color="success"
+                      onClick={handleCreateOtherUser}
+                    >
+                      CREATE
+                    </Button>
+                  </Grid>
+                </>}
               </Grid>
             </Grid>
-
           </Grid>
         </Paper>
       </Grid>
     </Fragment>
-
   )
 }
 
