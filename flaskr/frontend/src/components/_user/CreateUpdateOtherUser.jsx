@@ -132,6 +132,7 @@ const CreateUpdateOtherUser = (props) => {
         console.log(error)
       }
     })()
+    setOtherUserData(initialOtherUser)
     setEdit(false)
   }
 

@@ -8,9 +8,9 @@ import { PersonOff as AvIcon, Person, Logout } from '@mui/icons-material'
 import { UserContext, AuthContext } from './tools/contexts'
 import RDialog from './tools/ReusableDialog'
 
-const stringAvatar = user => {
+const stringAvatar = (user, auth) => {
 
-  if (user) {
+  if (user && auth) {
     return [user.first_name[0], user.last_name[0]].join('').toUpperCase()
   }
   return <AvIcon />
@@ -19,7 +19,7 @@ const stringAvatar = user => {
 const AvatarMenu = props => {
 
   const { user, setUser } = useContext(UserContext)
-  const { setAuth } = useContext(AuthContext)
+  const { auth, setAuth } = useContext(AuthContext)
   const { setTabValue, disabled, ...others } = props
   const location = useLocation()
   const navigate = useNavigate()
@@ -66,7 +66,7 @@ const AvatarMenu = props => {
         color='secondary'
         disabled={disabled} >
 
-        <Avatar sx={{ bgcolor: bg }} children={stringAvatar(user)} />
+        <Avatar sx={{ bgcolor: bg }} children={stringAvatar(user, auth)} />
 
       </IconButton>
 

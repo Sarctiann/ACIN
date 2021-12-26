@@ -1,6 +1,4 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_simple.view_decorators import jwt_required
-from mongoengine.fields import EmailField
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flaskr.extensions import jwt
@@ -56,7 +54,8 @@ def get_user_data():
     username = jwt.get_jwt()['sub']['identity']
 
     user = Users.objects(username=username).first()
-    if not user: return jsonify({'err': 'No logged user!'})
+    if not user:
+        return jsonify({'err': 'No logged user!'})
 
     return jsonify({
         'username': username,
@@ -69,7 +68,7 @@ def get_user_data():
 
 @users_api_v1.post('/update-user')
 @jwt.jwt_required
-def signuupdate_user():
+def update_user():
 
     identity = jwt.get_jwt()['sub']
 
@@ -86,9 +85,12 @@ def signuupdate_user():
             user.update(
                 first_name=data.get('first_name', user.first_name),
                 last_name=data.get('last_name', user.last_name),
-                is_admin=data.get('is_admin', user.is_admin)
             )
             msg['msg'] = 'User Updated'
+            if user.is_admin:
+                user.update(is_admin=data.get('is_admin', user.is_admin))
+            if not user.is_admin and data.get('is_admin'):
+                msg['err'] = "Can't become admin yourself"
             if (usr := data.get('username')) != user.username:
                 user.update(username=usr)
                 msg['wrn'] = 'You need to login with the new credentials'
@@ -165,7 +167,7 @@ def get_users():
 
 @users_api_v1.post('/update-other-user')
 @jwt.jwt_required
-def signuupdate_other_user():
+def update_other_user():
 
     is_admin = jwt.get_jwt()['sub']['is_admin']
 

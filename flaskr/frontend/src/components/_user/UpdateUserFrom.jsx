@@ -15,7 +15,7 @@ const UpdateUserForm = (props) => {
 
   const initialUser = {
     username: '',
-    email:'',
+    email: '',
     password: '',
     new_password: '',
     confirm_new_password: '',
@@ -41,10 +41,10 @@ const UpdateUserForm = (props) => {
             }
           )
           setUserData({
+            ...res.data,
             password: '',
             new_password: '',
-            confirm_new_password: '',
-            ...res.data
+            confirm_new_password: ''
           })
         }
         catch (error) {
@@ -173,17 +173,19 @@ const UpdateUserForm = (props) => {
                 onChange={handleChangeUser}
               />
             </Grid>
-            <Grid item mb={0}>
-              <FormControlLabel control={
-                <Switch
-                  name='is_admin'
-                  checked={userData['is_admin']}
-                  onChange={handleChangeUser}
+            {user['is_admin'] &&
+              <Grid item mb={0}>
+                <FormControlLabel control={
+                  <Switch
+                    name='is_admin'
+                    checked={userData['is_admin']}
+                    onChange={handleChangeUser}
+                  />
+                }
+                  label='Is Admin'
                 />
-              }
-                label='Is Admin'
-              />
-            </Grid>
+              </Grid>
+            }
             <Grid item>
               <TextField size='small'
                 name='first_name'
