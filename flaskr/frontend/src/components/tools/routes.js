@@ -2,14 +2,12 @@
 // append new ones (to the tail) to make the app grow.
 export const routes = [
     '/news',
-    '/calculator',
+    '/calculators',
     '/answers',
     '/settings',
   ]
   
 export const sub_routes = [
-    'complete',
-    'basic',
     'answers',
     'calculator',
     'regexs'

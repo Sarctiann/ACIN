@@ -19,14 +19,13 @@ const NavMenu = props => {
     { label: 'DIVIDER', icon: Newspaper, key: 0 },
     { label: 'News', route: routes[0] },
     { label: 'DIVIDER', icon: Calculate, key: 1 },
-    { label: 'Complete Calculator', route: `${routes[1]}/${sub_routes[0]}` },
-    { label: 'Basic Calculator', route: `${routes[1]}/${sub_routes[1]}` },
+    { label: 'Calculators', route: `${routes[1]}` },
     { label: 'DIVIDER', icon: ViewList, key: 2 },
     { label: 'Answers', route: routes[2] },
     { label: 'DIVIDER', icon: Settings, key: 3 },
-    { label: 'Answers Settings', route: `${routes[3]}/${sub_routes[2]}` },
-    { label: 'Calculator Settings', route: `${routes[3]}/${sub_routes[3]}` },
-    { label: 'Regexs Settings', route: `${routes[3]}/${sub_routes[4]}` },
+    { label: 'Answers Settings', route: `${routes[3]}/${sub_routes[0]}` },
+    { label: 'Calculator Settings', route: `${routes[3]}/${sub_routes[1]}` },
+    { label: 'Regexs Settings', route: `${routes[3]}/${sub_routes[2]}` },
   ]
 
   const navigate = useNavigate()

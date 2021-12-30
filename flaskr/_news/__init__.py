@@ -63,14 +63,17 @@ def create_post():
     if data:
         if user:
             try:
-                time = dt.now() + td(days=int(data.get('days_offset', '0')))
+                time = dt.now()
+                if offset:= data.get('days_offset'):
+                    time + td(days=int(offset))
+                    time.replace(hour=10, minute=30, second=0)
                 Posts(
                     owner=user,
                     title=data.get('title', 'Untitled'),
                     content=data.get('content', 'No content'),
                     severity=data.get('severity', Severity.NORMAL),
                     is_public=data.get('is_public', False),
-                    created_at=time.replace(hour=10, minute=30, second=0)
+                    created_at=time
                 ).save()
                 NewestPosts(owner=user).save()
                 res['msg'] = 'Post Created'

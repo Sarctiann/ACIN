@@ -36,17 +36,6 @@ def signin():
         return jsonify({'err': str(e)})
 
 
-@users_api_v1.get('/check-auth')
-@jwt.jwt_required
-def check_auth():
-
-    data = jwt.get_jwt()
-
-    return jsonify({
-        'identity': data['sub']['identity']
-    })
-
-
 @users_api_v1.get('/get-user-data')
 @jwt.jwt_required
 def get_user_data():

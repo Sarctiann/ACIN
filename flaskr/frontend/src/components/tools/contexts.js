@@ -6,6 +6,8 @@ export const UserContext = createContext(
     { user: '', setUser: () => { } })
 export const AuthContext = createContext(
     { auth: '', setAuth: () => { } })
+export const PostContext = createContext(
+    { fetchedPosts: '', setFetchedPosts: () => { } })
 // -----------------------------
 
 const GlobalContext = ({ children }) => {
@@ -21,6 +23,11 @@ const GlobalContext = ({ children }) => {
         () => ({ auth, setAuth }),
         [auth, setAuth]
     );
+    const [fetchedPosts, setFetchedPosts] = useState([])
+    const postsValue = useMemo(
+        () => ({ fetchedPosts, setFetchedPosts }),
+        [fetchedPosts, setFetchedPosts]
+    )
     // ----------------------------------------
 
     return (
@@ -28,7 +35,9 @@ const GlobalContext = ({ children }) => {
         // 3. Provide the contexts
         <UserContext.Provider value={userValue}>
             <AuthContext.Provider value={authValue}>
-                {children}
+                <PostContext.Provider value={postsValue}>
+                    {children}
+                </PostContext.Provider>
             </AuthContext.Provider>
         </UserContext.Provider>
         // -----------------------

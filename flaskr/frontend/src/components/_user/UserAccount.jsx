@@ -15,7 +15,6 @@ const UserAccount = () => {
 
   const initialOtherUser = {
     username: '',
-    password: '',
     email: '',
     confirm_email: '',
     first_name: '',

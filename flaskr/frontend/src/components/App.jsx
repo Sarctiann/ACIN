@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { cyan, orange } from "@mui/material/colors"
@@ -9,9 +9,7 @@ import Navbar from './NavBar'
 import { routes, sub_routes, api_url } from './tools/routes'
 
 import News from './_news/News'
-import Calculator from './_calculator/Calculator'
-import CompleteCalculator from './_calculator/CompleteCalculator'
-import BasicCalculator from './_calculator/BasicCalculator'
+import Calculators from './_calculator/Calculators'
 import Answers from './_answers/Answers'
 import Settings from './_settings/Settings'
 import AnswersSettings from './_settings/AnswersSettings'
@@ -20,7 +18,7 @@ import RegexsSettings from './_settings/RegexsSettings'
 import UserLogin from './_user/UserLogin'
 import UserAccount from './_user/UserAccount'
 
-import { UserContext, AuthContext } from './tools/contexts'
+import { UserContext, AuthContext, PostContext } from './tools/contexts'
 
 
 const theme = createTheme({
@@ -34,45 +32,62 @@ const theme = createTheme({
 
 const App = () => {
 
-  const { user } = useContext(UserContext)
+  const { user, setUser} = useContext(UserContext)
   const { auth, setAuth } = useContext(AuthContext)
+  const { setFetchedPosts } = useContext(PostContext)
+  const [timeStamp, setTimeStamp] = useState(null)
 
   useEffect(() => {
     const source = axios.CancelToken.source()
-    if (user?.token) {
-      (async () => {
-        try {
-          const res = await axios.get(
-            api_url + '/users/check-auth',
-            {
-              cancelToken: source.token,
-              headers: {
-                'Accept': '*/*',
-                'Authorization': `Bearer ${user['token']}`
-              }
+    const checkForNewPosts = async () => {
+      try {
+        const res = await axios.post(
+          api_url + '/news/fetch-posts',
+          { last_post: timeStamp },
+          {
+            cancelToken: source.token,
+            headers: {
+              Accept: '*/*',
+              Authorization: `Bearer ${user['token']}`
             }
-          )
-          if (res && user['username'] === res.data['identity']) {
-            setAuth(true)
-          } else {
-            setAuth(false)
           }
+        )
+        if (res.data['newest_post']) {
+          setTimeStamp(res.data['newest_post'])
+          setFetchedPosts(res.data['posts'])
+        } else if (res.data['wrn']) {
+          console.log(res.data['wrn'])
+        } else if (res.data['err']) {
+          setAuth(false)
+          console.log(res.data['err'])
         }
-        catch (error) {
-          const errCode = error.response?.status
-          if (errCode === 422 || errCode === 401) {
-            setAuth(false)
-            console.log('NOT AUTHORIZED', errCode)
-          } else {
-            console.log(error)
-          }
+      }
+      catch (error) {
+        const errCode = error.response?.status
+        if (errCode === 422 || errCode === 401) {
+          setUser(undefined)
+          setAuth(false)
+          localStorage.removeItem('user')
+          console.log('NOT AUTHORIZED', errCode)
+        } else {
+          console.log(error)
         }
-      })()
+      }
     }
+    if (user?.token) {
+      setAuth(true)
+      checkForNewPosts()
+    }
+    const watcher = setInterval(() => {
+      if (user?.token) {
+        checkForNewPosts()
+      }
+    }, 3000)
     return () => {
-      source.cancel()
+      clearInterval(watcher)
+      source.cancel('Leaving News page or the data is already loaded')
     }
-  }, [user, setAuth])
+  }, [user, setUser, setAuth, timeStamp, setFetchedPosts])
 
   return (
     <ThemeProvider theme={theme}>
@@ -87,22 +102,17 @@ const App = () => {
 
               <Route path={routes[0]} element={<News />} />
 
-              <Route path={routes[1]} element={<Calculator />} >
-                <Route
-                  path={sub_routes[0]} element={<CompleteCalculator />} />
-                <Route
-                  path={sub_routes[1]} element={<BasicCalculator />} />
-              </Route>
+              <Route path={routes[1]} element={<Calculators />} />
 
               <Route path={routes[2]} element={<Answers />} />
 
               <Route path={routes[3]} element={<Settings />} >
                 <Route
-                  path={sub_routes[2]} element={<AnswersSettings />} />
+                  path={sub_routes[0]} element={<AnswersSettings />} />
                 <Route
-                  path={sub_routes[3]} element={<CalculatorSettings />} />
+                  path={sub_routes[1]} element={<CalculatorSettings />} />
                 <Route
-                  path={sub_routes[4]} element={<RegexsSettings />} />
+                  path={sub_routes[2]} element={<RegexsSettings />} />
               </Route>
 
               <Route path={'login'} element={<UserLogin />} />

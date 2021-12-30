@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useMemo } from 'react'
+import { useContext, useState, useMemo } from 'react'
 import {
   Grid, Box, Alert, AlertTitle, Divider, Chip, Stack, Typography, Button,
   Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText
@@ -6,70 +6,17 @@ import {
 import { Alarm } from '@mui/icons-material'
 import axios from 'axios'
 
-import { UserContext } from '../tools/contexts'
+import { PostContext, UserContext } from '../tools/contexts'
 import { api_url } from '../tools/routes'
+import daysAgo from '../tools/daysAgo'
 
-const daysAgo = (today, date) => {
-  const delta = ((today - date) / (1000 * 3600 * 24)).toFixed()
-  let label
-  switch (delta) {
-    case '0':
-      label = 'Today'
-      break
-    case '1':
-      label = 'Yesterday'
-      break
-    default:
-      label = `${delta} days ago`
-      break
-  }
-  return label
-}
 
 const Posts = (props) => {
 
   const { filter: { severity, owner }, handleMessage } = props
+  const { fetchedPosts } = useContext(PostContext)
   const { user } = useContext(UserContext)
-  const [timeStamp, setTimeStamp] = useState(null)
-  const [fetchedPosts, setFetchedPosts] = useState([])
   const [postToDelete, setPostToDelete] = useState('')
-
-  useEffect(() => {
-    const source = axios.CancelToken.source()
-    const checkForNewPosts = async () => {
-      try {
-        const res = await axios.post(
-          api_url + '/news/fetch-posts',
-          { last_post: timeStamp },
-          {
-            cancelToken: source.token,
-            headers: {
-              Accept: '*/*',
-              Authorization: `Bearer ${user['token']}`
-            }
-          }
-        )
-        if (res.data['newest_post']) {
-          setTimeStamp(res.data['newest_post'])
-          setFetchedPosts(res.data['posts'])
-        } else {
-          if (res.data['wrn']) { console.log(res.data['wrn']) }
-          if (res.data['err']) { console.log(res.data['err']) }
-        }
-      }
-      catch (error) {
-        console.error(error)
-      }
-    }
-    checkForNewPosts()
-    const watcher = setInterval(() => {
-      checkForNewPosts()
-    }, 3000)
-    return () => {
-      clearInterval(watcher)
-      source.cancel('Leaving News page or the data is already loaded')
-    }
-  }, [user, timeStamp, setFetchedPosts])
 
   const posts = useMemo(() => {
     if (fetchedPosts.length > 0) {
@@ -230,7 +177,7 @@ const Posts = (props) => {
         <DialogActions>
           <Button onClick={justClose}>
             Cancel </Button>
-          <Button 
+          <Button
             onClick={() => handleDelete(postToDelete)} color='error' autoFocus
           >
             DELETE </Button>

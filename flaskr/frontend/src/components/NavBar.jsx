@@ -18,7 +18,7 @@ const Navbar = () => {
 
   const location = useLocation()
 
-  let currentTab = false;
+  let currentTab
   switch (`/${location.pathname.split('/')[1]}`) {
     case routes[0]:
       currentTab = routes[0]
@@ -42,6 +42,7 @@ const Navbar = () => {
   const handleChange = (_, newValue) => {
     switch (newValue) {
       case routes[0]:
+      case routes[1]:
       case routes[2]:
         setTabValue(newValue)
         break;
@@ -66,11 +67,9 @@ const Navbar = () => {
               icon={<Newspaper />} iconPosition='start'
               component={Link} to={routes[0]} disabled={disabled} />
 
-            <MenuTab value={routes[1]} label='Calculator' icon={<Calculate />}
-              setTabValue={setTabValue} items={[
-                { label: 'Complete Calculator', sub_route: sub_routes[0] },
-                { label: 'Basic Calculator', sub_route: sub_routes[1] }
-              ]} disabled={disabled} />
+            <Tab value={routes[1]} label='Calculators' 
+              icon={<Calculate />} iconPosition='start'
+              component={Link} to={routes[1]} disabled={disabled} />
 
             <Tab value={routes[2]} label='Answers'
               icon={<ViewList />} iconPosition='start'
@@ -79,9 +78,9 @@ const Navbar = () => {
             <MenuTab value={routes[3]}
               label='Settings' icon={<Settings />}
               setTabValue={setTabValue} items={[
-                { label: 'Answers Settings', sub_route: sub_routes[2] },
-                { label: 'Calculator Settings', sub_route: sub_routes[3] },
-                { label: 'Regexs Settings', sub_route: sub_routes[4] }
+                { label: 'Answers Settings', sub_route: sub_routes[0] },
+                { label: 'Calculator Settings', sub_route: sub_routes[1] },
+                { label: 'Regexs Settings', sub_route: sub_routes[2] }
               ]} disabled={disabled} />
 
           </Tabs>

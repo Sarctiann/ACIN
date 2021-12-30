@@ -2,6 +2,7 @@ import { useState, useContext } from 'react'
 import {
   Typography, Grid, Box, Divider, TextField, Button, useMediaQuery
 } from '@mui/material';
+import { Send } from '@mui/icons-material'
 import PostSelect from './PostSelect'
 import axios from 'axios';
 
@@ -60,7 +61,7 @@ const Panel = (props) => {
       return
     }
     const days_offset = parseInt((newPost.days_offset || 0))
-    if ( 0 > days_offset || 7 < days_offset) {
+    if (0 > days_offset || 7 < days_offset) {
       handleMessage('"within days" must be between 0 and 7', 'error')
       return
     }
@@ -187,9 +188,11 @@ const Panel = (props) => {
           </Grid>
           <Grid item xs={5} md={3}>
             <Button variant='contained' fullWidth size='small'
-              onClick={handleSend} {...send_props}
+              onClick={handleSend} {...send_props} endIcon={<Send />}
             >
-              Send
+              <Typography variant='h6'>
+                Send
+              </Typography>
             </Button>
           </Grid>
         </Grid>

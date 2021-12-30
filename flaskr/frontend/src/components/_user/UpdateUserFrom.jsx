@@ -176,7 +176,7 @@ const UpdateUserForm = (props) => {
             {user['is_admin'] &&
               <Grid item mb={0}>
                 <FormControlLabel control={
-                  <Switch
+                  <Switch size='small'
                     name='is_admin'
                     checked={userData['is_admin']}
                     onChange={handleChangeUser}
