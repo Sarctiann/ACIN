@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { cyan, orange } from "@mui/material/colors"
 import { Paper, CssBaseline } from "@mui/material"
@@ -32,10 +32,11 @@ const theme = createTheme({
 
 const App = () => {
 
-  const { user, setUser} = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const { auth, setAuth } = useContext(AuthContext)
   const { setFetchedPosts } = useContext(PostContext)
   const [timeStamp, setTimeStamp] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const source = axios.CancelToken.source()
@@ -48,7 +49,7 @@ const App = () => {
             cancelToken: source.token,
             headers: {
               Accept: '*/*',
-              Authorization: `Bearer ${user['token']}`
+              Authorization: `Bearer ${user?.token}`
             }
           }
         )
@@ -56,25 +57,23 @@ const App = () => {
           setTimeStamp(res.data['newest_post'])
           setFetchedPosts(res.data['posts'])
         } else if (res.data['wrn']) {
-          console.log(res.data['wrn'])
+          console.warn(res.data['wrn'])
         } else if (res.data['err']) {
           setAuth(false)
-          console.log(res.data['err'])
+          console.error(res.data['err'])
         }
       }
       catch (error) {
         const errCode = error.response?.status
         if (errCode === 422 || errCode === 401) {
-          setUser(undefined)
+          navigate('/login')
+          setUser(null)
           setAuth(false)
           localStorage.removeItem('user')
-          console.log('NOT AUTHORIZED', errCode)
-        } else {
-          console.log(error)
         }
       }
     }
-    if (user?.token) {
+    if (user) {
       setAuth(true)
       checkForNewPosts()
     }
@@ -87,7 +86,39 @@ const App = () => {
       clearInterval(watcher)
       source.cancel('Leaving News page or the data is already loaded')
     }
-  }, [user, setUser, setAuth, timeStamp, setFetchedPosts])
+  }, [user, setUser, setAuth, navigate, timeStamp, setFetchedPosts])
+
+  useEffect(() => {
+    const source = axios.CancelToken.source()
+    const refreshing = setInterval(() => {
+      if (user?.token) {
+        (async () => {
+          try {
+            const res = await axios.get(
+              api_url + '/users/refresh-auth',
+              {
+                cancelToken: source.token,
+                headers: {
+                  Accept: '*/*',
+                  Authorization: `Bearer ${user.token}`
+                }
+              }
+            )
+            if (res.data['user']) {
+              setUser(res.data['user'])
+            }
+          }
+          catch (error) {
+            console.error(error)
+          }
+        })()
+      }
+    }, 60 * 60 * 23 * 1000)
+    return () => {
+      clearInterval(refreshing)
+    }
+  }, [user, setUser])
+
 
   return (
     <ThemeProvider theme={theme}>

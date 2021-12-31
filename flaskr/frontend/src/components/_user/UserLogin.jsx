@@ -85,6 +85,9 @@ const UserLogin = () => {
             type='password'
             value={uPass}
             onChange={handleUPass}
+            onKeyPress={
+              e => {if (e.key === 'Enter') {handleLogin(e)}}
+            }
           />
         </Grid>
         <Grid item xs={12}>

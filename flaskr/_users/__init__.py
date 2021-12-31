@@ -36,6 +36,30 @@ def signin():
         return jsonify({'err': str(e)})
 
 
+@users_api_v1.get('/refresh-auth')
+@jwt.jwt_required
+def refresh_auth():
+
+    identity = jwt.get_jwt()['sub']['identity']
+
+    try:
+        if identity:
+            user = Users.objects(username=identity).first()
+            return jsonify({
+                'user': {
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'email': user.email,
+                    'is_admin': user.is_admin,
+                    'token': jwt.create_jwt(identity=user.username)
+                }
+            })
+        else:
+            return jsonify({'err': 'Invalid Identity'})
+    except Exception as e:
+        return jsonify({'err': str(e)})
+
+
 @users_api_v1.get('/get-user-data')
 @jwt.jwt_required
 def get_user_data():
