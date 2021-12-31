@@ -14,10 +14,12 @@ const CalcHistory = (props) => {
   const { user } = useContext(UserContext)
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
     (async () => {
       const res = await axios.get(
         api_url + '/calculator/get-history',
         {
+          cancelToken: source.token,
           headers: {
             Accept: '*/*',
             Authorization: `Bearer ${user.token}`
@@ -34,6 +36,9 @@ const CalcHistory = (props) => {
         console.error(res.data['err'])
       }
     })()
+    return () => {
+      source.cancel()
+    }
   }, [user, setHistory])
 
   const registries = useMemo(() => {
