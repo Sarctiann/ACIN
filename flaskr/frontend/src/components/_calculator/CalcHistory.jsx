@@ -1,6 +1,6 @@
 import { useEffect, useContext, useMemo } from 'react'
-import { 
-  Paper, Typography, Tooltip, Grid, Box, Divider, Chip 
+import {
+  Paper, Typography, Tooltip, Grid, Box, Divider, Chip
 } from '@mui/material'
 import axios from 'axios'
 
@@ -77,25 +77,31 @@ const CalcHistory = (props) => {
               History
             </Typography>
           </Grid>
-          {registries.map(reg => {
+          {registries.map((reg, item) => {
             let component
             if (reg.divider) {
               component = (
                 <Grid item xs={12} key={reg.divider}>
                   <Divider>
-                    <Chip color='success' size='small' label={reg.divider} />
+                    <Chip color='warning' size='small' label={reg.divider} />
                   </Divider>
                 </Grid>
               )
             }
             if (reg._id) {
+
+              let tColor
+              if (item !== 1) {
+                tColor = { color: 'primary.main' }
+              }
+
               component = (
                 <Grid item xs={12} key={reg._id.$date}>
                   <Paper elevation={7}>
                     <Tooltip title={reg.footnote}
                       placement='right' disableInteractive arrow followCursor
                     >
-                      <Typography variant="h6" color="initial">
+                      <Typography variant="h6" {...tColor}>
                         {reg.calculation}
                       </Typography>
                     </Tooltip>

@@ -82,13 +82,15 @@ const Basic = (props) => {
                 name='price'
                 value={fields.price}
                 onChange={handleChange}
-              />
+                onKeyPress={e => {if (e.key === 'Enter') {handleGetPrice()}}}
+                />
             </Grid>
             <Grid item xs={12} md={4}>
               <TextField fullWidth label='day/month/year | %'
                 name='str_date'
                 value={fields.str_date}
                 onChange={handleChange}
+                onKeyPress={e => {if (e.key === 'Enter') {handleGetPrice()}}}
               />
             </Grid>
             <Grid item xs={12} md={4}>

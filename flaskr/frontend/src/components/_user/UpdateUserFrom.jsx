@@ -235,6 +235,9 @@ const UpdateUserForm = (props) => {
                     type='password'
                     value={userData['password']}
                     onChange={handleChangeUser}
+                    onKeyPress={
+                      e => {if (e.key === 'Enter') {handleUpdateUser()}}
+                    }
                   />
                 </Grid>
                 <RDialog
