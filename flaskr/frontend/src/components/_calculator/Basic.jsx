@@ -22,7 +22,7 @@ const Basic = (props) => {
   const handleGetPrice = () => {
     for (let [field, value] of Object.entries(fields)) {
       if (!value) {
-        handleMessage(`The field ${field} is required`, 'error')
+        handleMessage(`The ${field} field is required`, 'error')
         return
       }
     }
@@ -30,7 +30,10 @@ const Basic = (props) => {
       try {
         const res = await axios.post(
           api_url + '/calculator/price-add-percent',
-          fields,
+          {
+            ...fields,
+            str_date: fields.str_date.split('-').reverse().join('/')
+          },
           {
             headers: {
               Accept: '*/*',
@@ -43,16 +46,14 @@ const Basic = (props) => {
           setHistory([
             {
               _id: { $date: new Date().getTime() },
-              calculation:
-                `$${fields.price} + ${res.data.percent}% = $${res.data.result}`,
-              footnote:
-                `(input: ${fields.str_date}, as date: ${res.data.as_date})`
+              calculation: res.data.calculation,
+              footnote: res.data.footnote
             },
             ...history
           ])
         }
         if (res.data['err']) {
-          handleMessage(res.data['err'], 'error')
+          handleMessage(res.data.err, 'error')
         }
       }
       catch (error) {
@@ -69,34 +70,50 @@ const Basic = (props) => {
             sx={{ minHeight: '25vh', overflow: 'auto' }}
           >
             <Grid item xs={12}>
-              <Typography variant="h5" color="initial">
+              <Typography variant='h5' color='initial'>
                 basic calculator
               </Typography>
             </Grid>
             <Grid item xs={12} md={4}>
-              <TextField fullWidth label='Price' InputProps={{
-                startAdornment: <InputAdornment position="start">
-                  $
-                </InputAdornment>
-              }}
+              <TextField fullWidth label='Price'
+                type='number'
                 name='price'
+                InputProps={{
+                  inputProps: { min: '0', step: '10' },
+                  startAdornment: <InputAdornment position='start'>
+                    <Typography variant='h5' color='primary'>
+                      $
+                    </Typography>
+                  </InputAdornment>
+                }}
                 value={fields.price}
                 onChange={handleChange}
-                onKeyPress={e => {if (e.key === 'Enter') {handleGetPrice()}}}
-                />
+                onKeyPress={
+                  e => { if (e.key === 'Enter') { handleGetPrice() } }
+                }
+              />
             </Grid>
             <Grid item xs={12} md={4}>
-              <TextField fullWidth label='day/month/year | %'
+              <TextField fullWidth label='Date' type='date'
+                InputProps={{
+                  startAdornment: <InputAdornment position='start'>
+                    <Typography variant='body1' color='primary'>
+                      from
+                    </Typography>
+                  </InputAdornment>
+                }}
                 name='str_date'
                 value={fields.str_date}
                 onChange={handleChange}
-                onKeyPress={e => {if (e.key === 'Enter') {handleGetPrice()}}}
+                onKeyPress={
+                  e => { if (e.key === 'Enter') { handleGetPrice() } }
+                }
               />
             </Grid>
             <Grid item xs={12} md={4}>
               <Button fullWidth onClick={handleGetPrice} size='large'
                 sx={{ minHeight: '75%' }}
-                variant="contained" color="error" endIcon={<Calculate />}
+                variant='contained' color='success' endIcon={<Calculate />}
               >
                 <Typography variant='body1'>
                   GET PRICE

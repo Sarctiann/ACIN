@@ -181,7 +181,7 @@ const Panel = (props) => {
             <TextField fullWidth label='within days' size='small'
               name='days_offset'
               type='number'
-              inputProps={{ min: "0", max: "7", step: "1" }}
+              inputProps={{ min: '0', max: '7', step: '1' }}
               value={newPost.days_offset}
               onChange={handleChange}
             />

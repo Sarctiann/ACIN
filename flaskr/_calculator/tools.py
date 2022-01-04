@@ -4,9 +4,11 @@ import json
 from datetime import datetime as dt
 
 from .models import DatesPercents, Lists
+from .Percentages import Percentron
 
 
 DF = re.compile(r'(\d*)/(\d*)/?(\d*)')
+pct = Percentron()
 
 
 def _format_date(date):
@@ -43,6 +45,74 @@ def get_percent(str_date):
         percent = str_date
 
     return float(percent), fDate
+
+
+def perform_operation_first(second, third, sign, operation):
+
+    percent, as_date = get_percent(second)
+    if sign == 'pri' and operation == 'add':
+        first = pct.val_from_increase(percent, val=float(third))
+        calculation = f'${first} + {percent}% = ${third}'
+    elif sign == 'pri' and operation == 'sub':
+        first = pct.val_from_discount(percent, val=float(third))
+        calculation = f'${first} - {percent}% = ${third}'
+    elif sign == 'per' and operation == 'add':
+        first = pct.per_from_addition(percent, per=float(third))
+        calculation = f'{first}% + {percent}% = {third}%'
+    elif sign == 'per' and operation == 'sub':
+        first = pct.per_from_subtraction(percent, per=float(third))
+        calculation = f'{first}% - {percent}% = {third}%'
+    else:
+        first, calculation = None, None
+
+    footnote = f'(inputs: {second = } as date: {as_date} and {third = })'
+
+    return first, calculation, footnote
+
+
+def perform_operation_second(first, third, sign, operation):
+
+    if sign == 'pri' and operation == 'add':
+        second = pct.per_from_val_increase(float(third), val=float(first))
+        calculation = f'${first} + {second}% = ${third}'
+    elif sign == 'pri' and operation == 'sub':
+        second = pct.per_from_val_discount(float(third), val=float(first))
+        calculation = f'${first} - {second}% = ${third}'
+    elif sign == 'per' and operation == 'add':
+        second = pct.per_from_per_addition(float(third), per=float(first))
+        calculation = f'{first}% + {second}% = {third}%'
+    elif sign == 'per' and operation == 'sub':
+        second = pct.per_from_per_subtraction(float(third), per=float(first))
+        calculation = f'{first}% - {second}% = {third}%'
+    else:
+        second, calculation = None, None
+
+    footnote = f'(inputs: {first = } and {third = })'
+
+    return second, calculation, footnote
+
+
+def perform_operation_third(first, second, sign, operation):
+
+    percent, as_date = get_percent(second)
+    if sign == 'pri' and operation == 'add':
+        third = pct.val_increase(percent, val=float(first))
+        calculation = f'${first} + {percent}% = ${third}'
+    elif sign == 'pri' and operation == 'sub':
+        third = pct.val_discount(percent, val=float(first))
+        calculation = f'${first} - {percent}% = ${third}'
+    elif sign == 'per' and operation == 'add':
+        third = pct.per_addition(percent, per=float(first))
+        calculation = f'{first}% + {percent}% = {third}%'
+    elif sign == 'per' and operation == 'sub':
+        third = pct.per_subtraction(percent, per=float(first))
+        calculation = f'{first}% - {percent}% = {third}%'
+    else:
+        third, calculation = None, None
+
+    footnote = f'(inputs: {first} and {second = } as date: {as_date})'
+
+    return third, calculation, footnote
 
 
 def upload_data(list_name):

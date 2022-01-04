@@ -1,45 +1,13 @@
-import { useEffect, useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import {
   Paper, Typography, Tooltip, Grid, Box, Divider, Chip
 } from '@mui/material'
-import axios from 'axios'
 
-import { UserContext } from '../tools/contexts'
-import { api_url } from '../tools/routes'
 import daysAgo from '../tools/daysAgo'
 
 const CalcHistory = (props) => {
 
-  const { history, setHistory } = props
-  const { user } = useContext(UserContext)
-
-  useEffect(() => {
-    const source = axios.CancelToken.source();
-    (async () => {
-      const res = await axios.get(
-        api_url + '/calculator/get-history',
-        {
-          cancelToken: source.token,
-          headers: {
-            Accept: '*/*',
-            Authorization: `Bearer ${user.token}`
-          }
-        }
-      )
-      if (res.data['hist']) {
-        setHistory(res.data['hist'])
-      }
-      if (res.data['msg']) {
-        console.warn(res.data['msg'])
-      }
-      if (res.data['err']) {
-        console.error(res.data['err'])
-      }
-    })()
-    return () => {
-      source.cancel()
-    }
-  }, [user, setHistory])
+  const { history } = props
 
   const registries = useMemo(() => {
 
@@ -79,7 +47,7 @@ const CalcHistory = (props) => {
         >
           <Grid item xs={12}>
             <Typography variant="h5" color="initial">
-              History
+              Result / History
             </Typography>
           </Grid>
           {registries.map((reg, item) => {

@@ -60,25 +60,6 @@ def refresh_auth():
         return jsonify({'err': str(e)})
 
 
-@users_api_v1.get('/get-user-data')
-@jwt.jwt_required
-def get_user_data():
-
-    username = jwt.get_jwt()['sub']['identity']
-
-    user = Users.objects(username=username).first()
-    if not user:
-        return jsonify({'err': 'No logged user!'})
-
-    return jsonify({
-        'username': username,
-        'email': user.email,
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-        'is_admin': user.is_admin
-    })
-
-
 @users_api_v1.post('/update-user')
 @jwt.jwt_required
 def update_user():
