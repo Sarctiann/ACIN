@@ -28,7 +28,7 @@ const Complete = (props) => {
     setSign(value)
     setFields({ ...fields, first: '', third: '' })
   }
-  
+
   const handleOperation = (e) => {
     const { value } = e.target
     setOperation(value)
@@ -285,6 +285,9 @@ const Complete = (props) => {
                 }}
                 value={expression}
                 onChange={handleExpressionChange}
+                onKeyPress={e => {
+                  if (e.key === 'Enter') handleEvaluate()
+                }}
               />
             </Grid>
             <Grid item xs={4}></Grid>

@@ -159,6 +159,25 @@ def get_users():
     return jsonify(user_response)
 
 
+@users_api_v1.get('/get-user-data')
+@jwt.jwt_required
+def get_user_data():
+
+    username = jwt.get_jwt()['sub']['identity']
+    user = Users.objects(username=username).first()
+    res = {}
+
+    if user:
+        res['username'] = user.username
+        res['first_name'] = user.first_name
+        res['last_name'] = user.last_name
+        res['is_admin'] = user.is_admin
+    else:
+        res['err'] = 'Invalid User'
+
+    return jsonify(res)
+
+
 @users_api_v1.post('/update-other-user')
 @jwt.jwt_required
 def update_other_user():
