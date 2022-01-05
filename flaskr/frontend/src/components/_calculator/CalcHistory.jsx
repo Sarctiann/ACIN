@@ -74,7 +74,9 @@ const CalcHistory = (props) => {
                     <Tooltip title={reg.footnote}
                       placement='right' disableInteractive arrow followCursor
                     >
-                      <Typography variant="h6" {...tColor}>
+                      <Typography variant="h6" {...tColor}
+                        sx={{ whiteSpace: 'pre-line' }}
+                      >
                         {reg.calculation}
                       </Typography>
                     </Tooltip>

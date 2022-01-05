@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router'
 import axios from 'axios'
 import {
@@ -14,9 +14,15 @@ const UserLogin = () => {
   const [uPass, setUPass] = useState('')
   const [loginState, setLoginState] = useState('')
 
-  const { setUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const navigate = useNavigate()
   const location = useLocation()
+
+  useEffect(() => {
+    if (user) {
+      navigate(location.pathname === '/login' ? '/news' : location.pathname)
+    }
+  })
 
   const handleUName = e => {
     setUName(e.target.value)
@@ -28,7 +34,6 @@ const UserLogin = () => {
 
   const handleLogin = async e => {
     e.preventDefault()
-
     const path = location.pathname === '/login' ? -1 : location.pathname
 
     try {
@@ -86,7 +91,7 @@ const UserLogin = () => {
             value={uPass}
             onChange={handleUPass}
             onKeyPress={
-              e => {if (e.key === 'Enter') {handleLogin(e)}}
+              e => { if (e.key === 'Enter') { handleLogin(e) } }
             }
           />
         </Grid>

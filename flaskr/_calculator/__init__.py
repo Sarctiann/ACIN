@@ -6,7 +6,7 @@ from .tools import (
     pct, get_percent, upload_data, store_list,
     perform_operation_first, perform_operation_second, perform_operation_third
 )
-from .models import History
+from .models import History, DatesPercents
 from flaskr._users.models import Users
 
 calculator_api_v1 = Blueprint('calculator', __name__, url_prefix='/calculator')
@@ -184,19 +184,34 @@ def resolve_expression():
             try:
                 result = eval(expression, {'__builtins__': None}, {'m': math})
 
-                format_exp = expression.replace(' ', '')
-                for char in '+-/*':
-                    format_exp = format_exp.replace(char, f' {char} ')
-                format_exp = format_exp.replace('(', ' (')
-                format_exp = format_exp.replace(')', ') ')
+                if isinstance(result, int) or isinstance(result, float):
+                    result = round(result, 2)
+                    eq = ' = '
+                elif isinstance(result, dict):
+                    result = {k: round(v, 2) for k, v in result.items()}
+                    eq = '\n=\n'
+                else:
+                    result = tuple((round(v, 2) for v in result))
+                    eq = '\n=\n'
+
+                calculation = f'{expression}{eq}{result}'
+
+                for char in '" '+"'":
+                    format_calc = calculation.replace(char, '')
+                for char in '+-/*=':
+                    format_calc = format_calc.replace(char, f' {char} ')
+                for char in '{[(':
+                    format_calc = format_calc.replace(char, f' {char}')
+                for char in ',:}])':
+                    format_calc = format_calc.replace(char, f'{char} ')
 
                 hist = History(
                     owner=user,
-                    calculation=f'{format_exp} = {result}',
+                    calculation=format_calc,
                     footnote=f'(input: {expression})'
                 ).save()
 
-                res['result'] = result
+                res['result'] = str(result)
                 res['calculation'] = hist.calculation
                 res['footnote'] = hist.footnote
             except Exception as e:
@@ -261,6 +276,25 @@ def load_list():
                 res['err'] = str(e)
         else:
             res['err'] = 'Invalid Data'
+    else:
+        res['err'] = 'Invalid Identity'
+
+    return jsonify(res)
+
+
+@calculator_api_v1.get('/get-list')
+@jwt.jwt_required
+def get_list():
+
+    identity = jwt.get_jwt()
+    res = {}
+
+    if identity:
+        try:
+            res['dates'] = DatesPercents.objects()
+
+        except Exception as e:
+            res['err'] = str(e)
     else:
         res['err'] = 'Invalid Identity'
 

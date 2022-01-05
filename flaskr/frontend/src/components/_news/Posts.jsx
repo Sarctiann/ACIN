@@ -63,7 +63,7 @@ const Posts = (props) => {
 
       return dividedPosts
     }
-  }, [fetchedPosts, severity, owner, user?.email])
+  }, [fetchedPosts, severity, owner, user])
 
   const handleDelete = (post) => {
     (async () => {

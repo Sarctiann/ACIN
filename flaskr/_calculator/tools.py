@@ -110,7 +110,7 @@ def perform_operation_third(first, second, sign, operation):
     else:
         third, calculation = None, None
 
-    footnote = f'(inputs: {first} and {second = } as date: {as_date})'
+    footnote = f'(inputs: {first = } and {second = } as date: {as_date})'
 
     return third, calculation, footnote
 
