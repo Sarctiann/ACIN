@@ -35,7 +35,7 @@ const Posts = (props) => {
           severity_filter = null
           break
       }
-      const owner_filter = owner === 'from All' ? null : user.email
+      const owner_filter = owner === 'from All' ? null : user?.email
 
       let filteredPosts = fetchedPosts.filter(post =>
         (severity_filter ? post.severity === severity_filter : true)
@@ -72,7 +72,7 @@ const Posts = (props) => {
         {
           headers: {
             Accept: '*/*',
-            Authorization: `Bearer ${user['token']}`
+            Authorization: `Bearer ${user?.token}`
           },
           data: post
         }
@@ -132,7 +132,7 @@ const Posts = (props) => {
                     post_props = {}
                     break
                 }
-                if (user.is_admin || element.owner._id === user.email) {
+                if (user?.is_admin || element.owner._id === user?.email) {
                   post_props = {
                     ...post_props,
                     onClose: () => { setPostToDelete(element._id) }

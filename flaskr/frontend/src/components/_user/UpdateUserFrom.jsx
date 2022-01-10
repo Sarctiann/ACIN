@@ -176,7 +176,7 @@ const UpdateUserForm = (props) => {
             {user['is_admin'] &&
               <Grid item mb={0}>
                 <FormControlLabel control={
-                  <Switch size='small'
+                  <Switch
                     name='is_admin'
                     checked={userData['is_admin']}
                     onChange={handleChangeUser}
@@ -242,7 +242,8 @@ const UpdateUserForm = (props) => {
                 </Grid>
                 <RDialog
                   title='Update User' message='Confirm user update?'
-                  confirmText='UPDATE' action={handleUpdateUser}
+                  confirmText='UPDATE' color='secondary'
+                  action={handleUpdateUser}
                 >
                   <Grid item px={2} pb={2}>
                     <Button variant="contained" color="warning">

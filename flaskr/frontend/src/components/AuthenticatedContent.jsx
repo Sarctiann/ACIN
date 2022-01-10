@@ -79,7 +79,7 @@ const AuthenticatedContent = (props) => {
               }
             )
             if (res.data['user']) {
-              setUser(res.data['user'])
+              setUser(res.data.user)
             }
           }
           catch (error) {

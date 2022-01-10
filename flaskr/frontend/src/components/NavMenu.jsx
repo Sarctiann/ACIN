@@ -13,7 +13,7 @@ import { routes, sub_routes } from './tools/routes'
 
 const NavMenu = props => {
 
-  const { setTabValue, disabled, ...others } = props
+  const { setTabValue, disabled, user, ...others } = props
 
   const items = [
     { label: 'DIVIDER', icon: Newspaper, key: 0 },
@@ -23,10 +23,16 @@ const NavMenu = props => {
     { label: 'DIVIDER', icon: ViewList, key: 2 },
     { label: 'Answers', route: routes[2] },
     { label: 'DIVIDER', icon: Settings, key: 3 },
-    { label: 'Answers Settings', route: `${routes[3]}/${sub_routes[0]}` },
-    { label: 'Calculator Settings', route: `${routes[3]}/${sub_routes[1]}` },
-    { label: 'Regexs Settings', route: `${routes[3]}/${sub_routes[2]}` },
+    { label: 'Answers Settings', route: `${routes[3]}/${sub_routes[0]}` }
   ]
+  if (user?.is_admin) {
+    items.push(
+      { label: 'Calculator Settings', route: `${routes[3]}/${sub_routes[1]}` }
+    )
+  }
+  items.push(
+    { label: 'Regexs Settings', route: `${routes[3]}/${sub_routes[2]}` }
+  )
 
   const navigate = useNavigate()
 

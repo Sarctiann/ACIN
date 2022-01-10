@@ -11,6 +11,11 @@ for its implementation I chose
 + mongoDB for database
 + and React with MUI for the frontend
 
+***
+
+### *TODO:*
++ Refactor axios functions
+
 
 ***
 

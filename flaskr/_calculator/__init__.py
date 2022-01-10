@@ -1,12 +1,13 @@
+import os
 import math
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_from_directory
 
 from flaskr.extensions import jwt
 from .tools import (
     pct, get_percent, upload_data, store_list,
     perform_operation_first, perform_operation_second, perform_operation_third
 )
-from .models import History, DatesPercents
+from .models import History, DatesPercents, Lists
 from flaskr._users.models import Users
 
 calculator_api_v1 = Blueprint('calculator', __name__, url_prefix='/calculator')
@@ -262,16 +263,24 @@ def load_list():
         data = request.get_json()
         if list_name := data.get('list_name'):
             try:
+                DatesPercents.objects().delete()
                 upload_data(list_name)
                 res['msg'] = f'{list_name} loaded'
 
             except Exception as e:
                 res['err'] = str(e)
         elif dates := data.get('dates'):
+            for i, date in enumerate(dates):
+                if date['percent'] == -1:
+                    DatesPercents.objects(str_date=date['_id']).delete()
+                    dates.pop(i)
+            dates.sort(key= lambda x: x['_id'])
+            print(dates)
             try:
                 list_name = store_list(dates)
                 upload_data(list_name)
                 res['msg'] = f'{list_name} created and loaded'
+                res['new_list'] = list_name
             except Exception as e:
                 res['err'] = str(e)
         else:
@@ -282,7 +291,7 @@ def load_list():
     return jsonify(res)
 
 
-@calculator_api_v1.get('/get-list')
+@calculator_api_v1.get('/get-lists-data')
 @jwt.jwt_required
 def get_list():
 
@@ -291,10 +300,62 @@ def get_list():
 
     if identity:
         try:
-            res['dates'] = DatesPercents.objects()
+            res['dates'] = DatesPercents.objects().order_by('-str_date')
+            res['lists'] = Lists.objects().order_by('-_id')
 
         except Exception as e:
             res['err'] = str(e)
+    else:
+        res['err'] = 'Invalid Identity'
+
+    return jsonify(res)
+
+
+@calculator_api_v1.post('/get-list-file')
+@jwt.jwt_required
+def get_list_file():
+
+    identity = jwt.get_jwt()
+    res = {}
+
+    if identity:
+        file_name = request.get_json().get('file_name')
+        if file_name:
+            try:
+                abs_path = os.path.dirname(os.path.abspath(__name__))
+                path = os.path.join('all_lists', file_name)
+                return send_from_directory(abs_path, path)
+
+            except Exception as e:
+                res['err'] = str(e)
+        else:
+            res['err'] = 'Invalid data'
+    else:
+        res['err'] = 'Invalid Identity'
+
+    return jsonify(res)
+
+
+@calculator_api_v1.delete('/drop-list')
+@jwt.jwt_required
+def drop_list():
+
+    identity = jwt.get_jwt()
+    res = {}
+
+    if identity:
+        name = request.get_json().get('file_name')
+        list_file = os.path.join('all_lists', name)
+        if name and os.path.exists(list_file):
+            try:
+                Lists.objects(list_name=name).first().delete()
+                os.remove(list_file)
+                res['msg'] = f'List {name} Dropped'
+
+            except Exception as e:
+                res['err'] = str(e)
+        else:
+            res['err'] = 'Invalid List file'
     else:
         res['err'] = 'Invalid Identity'
 

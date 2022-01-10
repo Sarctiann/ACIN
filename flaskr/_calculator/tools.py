@@ -128,14 +128,18 @@ def upload_data(list_name):
 
 def store_list(dates):
     today = dt.today()
-    new_name = f'list_{today.day:}-{today.month}-{str(today.year)[-2:]}.json'
+    new_name = 'list_{}-{}-{}.{}{}{}.json'.format(
+        today.day, today.month, str(today.year)[-2:], 
+        today.hour, today.minute, today.second
+    )
     new_path = os.path.join('all_lists', new_name)
 
     try:
-        Lists(list_name=new_name)
+        Lists(list_name=new_name).save()
     except Exception as e:
         print(e)
 
+    dates = {item['_id']: float(item['percent']) for item in dates}
     with open(new_path, 'w+', encoding='utf-8') as new_file:
         json.dump(dates, new_file, indent=4, ensure_ascii=False)
 

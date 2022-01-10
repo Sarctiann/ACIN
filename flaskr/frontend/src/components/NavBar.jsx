@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Tabs, Tab } from '@mui/material'
 import { Newspaper, Calculate, ViewList, Settings } from '@mui/icons-material'
 
 import { routes, sub_routes } from './tools/routes'
-import { AuthContext } from './tools/contexts'
+import { AuthContext, UserContext } from './tools/contexts'
 import MenuTab from './MenuTab'
 import AvatarMenu from './AvatarMenu'
 import NavMenu from './NavMenu'
@@ -14,6 +14,7 @@ import NavMenu from './NavMenu'
 const Navbar = () => {
 
   const { auth } = useContext(AuthContext)
+  const { user } = useContext(UserContext)
   const disabled = !Boolean(auth)
 
   const location = useLocation()
@@ -51,45 +52,53 @@ const Navbar = () => {
     }
   }
 
-  return (
-    <>
-      <AppBar position='sticky'>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
+  const items = [
+    { label: 'Answers Settings', sub_route: sub_routes[0] }
+  ]
+  if (user?.is_admin) {
+    items.push(
+      { label: 'Calculator Settings', sub_route: sub_routes[1] }
+    )
+  }
+  items.push({ label: 'Regexs Settings', sub_route: sub_routes[2] })
 
-          <NavMenu setTabValue={setTabValue} disabled={disabled} />
+return (
+  <>
+    <AppBar position='sticky'>
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
 
-          <Tabs sx={{ visibility: { xs: 'hidden', sm: 'visible' } }}
-            indicatorColor='primary'
-            onChange={handleChange}
-            value={tabValue}>
+        <NavMenu setTabValue={setTabValue} disabled={disabled}
+          user={user}
+        />
 
-            <Tab value={routes[0]} label='News'
-              icon={<Newspaper />} iconPosition='start'
-              component={Link} to={routes[0]} disabled={disabled} />
+        <Tabs sx={{ visibility: { xs: 'hidden', sm: 'visible' } }}
+          indicatorColor='primary'
+          onChange={handleChange}
+          value={tabValue}>
 
-            <Tab value={routes[1]} label='Calculators' 
-              icon={<Calculate />} iconPosition='start'
-              component={Link} to={routes[1]} disabled={disabled} />
+          <Tab value={routes[0]} label='News'
+            icon={<Newspaper />} iconPosition='start'
+            component={Link} to={routes[0]} disabled={disabled} />
 
-            <Tab value={routes[2]} label='Answers'
-              icon={<ViewList />} iconPosition='start'
-              component={Link} to={routes[2]} disabled={disabled} />
+          <Tab value={routes[1]} label='Calculators'
+            icon={<Calculate />} iconPosition='start'
+            component={Link} to={routes[1]} disabled={disabled} />
 
-            <MenuTab value={routes[3]}
-              label='Settings' icon={<Settings />}
-              setTabValue={setTabValue} items={[
-                { label: 'Answers Settings', sub_route: sub_routes[0] },
-                { label: 'Calculator Settings', sub_route: sub_routes[1] },
-                { label: 'Regexs Settings', sub_route: sub_routes[2] }
-              ]} disabled={disabled} />
+          <Tab value={routes[2]} label='Answers'
+            icon={<ViewList />} iconPosition='start'
+            component={Link} to={routes[2]} disabled={disabled} />
 
-          </Tabs>
+          <MenuTab value={routes[3]}
+            label='Settings' icon={<Settings />}
+            setTabValue={setTabValue} items={items} disabled={disabled} />
 
-          <AvatarMenu setTabValue={setTabValue} disabled={disabled} />
-        </Toolbar>
-      </AppBar>
-    </>
-  );
+        </Tabs>
+
+        <AvatarMenu setTabValue={setTabValue} disabled={disabled} />
+      </Toolbar>
+    </AppBar>
+  </>
+);
 }
 
 export default Navbar;

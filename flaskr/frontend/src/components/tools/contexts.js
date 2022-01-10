@@ -12,7 +12,7 @@ export const PostContext = createContext(
 
 const GlobalContext = ({ children }) => {
 
-    // 2. Packing the value and updater function
+    // 2. Packing the value and setter function
     const [user, setUser] = useUser();
     const userValue = useMemo(
         () => ({ user, setUser }),

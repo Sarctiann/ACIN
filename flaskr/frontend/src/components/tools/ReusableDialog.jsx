@@ -5,13 +5,17 @@ import {
 
 const RDialog = (props) => {
 
-  const { title, message, confirmText, action, children, ...others } = props
+  const {
+    title = 'add <title> prop', message = 'add <message> prop',
+    confirmText = 'add <confirmText> prop', color = 'error', disabled = false,
+    action, children, ...others
+  } = props
 
   const [open, setOpen] = useState(false)
   const handleOpen = () => {
     setOpen(true)
   }
-  
+
   const handleClose = (e) => {
     setOpen(false)
     try {
@@ -26,9 +30,13 @@ const RDialog = (props) => {
     setOpen(false)
   }
 
+  const divProps = !disabled ? {
+    onClick: handleOpen
+  } : {}
+
   return (
     <>
-      <div onClick={handleOpen}>
+      <div {...divProps}>
         {children}
       </div>
       <Dialog {...others}
@@ -38,18 +46,18 @@ const RDialog = (props) => {
         aria-describedby="description"
       >
         <DialogTitle id="title">
-          {title || 'add <title> prop'}
+          {title}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="description">
-            {message || 'add <message> prop'}
+            {message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={justClose}>
             Cancel </Button>
-          <Button onClick={handleClose} color='error' autoFocus>
-            {confirmText || 'add <confirmText> prop'} </Button>
+          <Button onClick={handleClose} color={color} autoFocus>
+            {confirmText} </Button>
         </DialogActions>
       </Dialog>
     </>

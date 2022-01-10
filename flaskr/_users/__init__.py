@@ -212,7 +212,7 @@ def update_other_user():
         })
 
 
-@users_api_v1.post('/delete-other-user')
+@users_api_v1.delete('/delete-other-user')
 @jwt.jwt_required
 def delete_other_user():
 

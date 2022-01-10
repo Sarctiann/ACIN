@@ -225,7 +225,7 @@ const CreateUpdateOtherUser = (props) => {
                     </Button>
                   </Grid>
                   <RDialog title='Update Other User'
-                    message='Confirm user update?'
+                    message='Confirm user update?' color='secondary'
                     confirmText='UPDATE' action={handleUpdateOtherUser}
                   >
                     <Grid item pl={2} pb={2}>

@@ -31,7 +31,7 @@ const UserAccount = () => {
       <Grid item xs={12}>
         <Typography variant="h3" color="secondary">User Account</Typography>
       </Grid>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
 
           <UpdateUserForm
             user={user}

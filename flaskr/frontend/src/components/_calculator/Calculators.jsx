@@ -16,6 +16,7 @@ const Calculator = () => {
   const [message, setMessage] = useState({ msg: '', vnt: '' })
   const [history, setHistory] = useState([])
   const [openSB, setOpenSB] = useState(false)
+  const [basic, setBasic] = useState(true)
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -49,8 +50,6 @@ const Calculator = () => {
     setMessage({ msg: msg, vnt: vnt })
     setOpenSB(true)
   }
-
-  const [basic, setBasic] = useState(false)
 
   const handleBasic = (e) => {
     const { checked } = e.target

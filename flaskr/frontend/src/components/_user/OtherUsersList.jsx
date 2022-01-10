@@ -53,14 +53,14 @@ const OtherUsersList = (props) => {
   const handleDeleteUser = (email) => {
     (async () => {
       try {
-        const res = await axios.post(
+        const res = await axios.delete(
           api_url + '/users/delete-other-user',
-          { email: email },
           {
             headers: {
               'Accept': '*/*',
               'Authorization': `Bearer ${user['token']}`
-            }
+            },
+            data: { email: email }
           }
           )
           if (res.data['msg']) {

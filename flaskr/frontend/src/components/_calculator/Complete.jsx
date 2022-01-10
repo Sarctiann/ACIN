@@ -104,6 +104,27 @@ const Complete = (props) => {
     handleQuery('/calculator/resolve-expression', { expression: expression })
   }
 
+  const handleEnterOnFields = () => {
+
+    if (fields.first === '' && fields.second !== '' && fields.third !== '') {
+      handleGetFirst()
+    } else if (
+      fields.first !== '' && fields.second === '' && fields.third !== ''
+    ) {
+      handleGetSecond()
+    } else if (
+      fields.first !== '' && fields.second !== '' && fields.third === ''
+    ) {
+      handleGetThird()
+    } else if (
+      fields.first !== '' && fields.second !== '' && fields.third !== ''
+    ) {
+      handleMessage('impossible to know which operation to perform!', 'warning')
+    } else {
+      handleMessage('You must provide 2 fields at least!', 'warning')
+    }
+  }
+
   const handleClear = () => {
     setFields({ first: '', second: '', third: '' })
     setExpression('')
@@ -191,6 +212,9 @@ const Complete = (props) => {
                 name='first'
                 value={fields.first}
                 onChange={handleChange}
+                onKeyPress={e => {
+                  if (e.key === 'Enter') handleEnterOnFields()
+                }}
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -212,6 +236,9 @@ const Complete = (props) => {
                 name='second'
                 value={fields.second}
                 onChange={handleChange}
+                onKeyPress={e => {
+                  if (e.key === 'Enter') handleEnterOnFields()
+                }}
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -232,6 +259,9 @@ const Complete = (props) => {
                 name='third'
                 value={fields.third}
                 onChange={handleChange}
+                onKeyPress={e => {
+                  if (e.key === 'Enter') handleEnterOnFields()
+                }}
               />
             </Grid>
             <Grid item xs={12} md={4}>

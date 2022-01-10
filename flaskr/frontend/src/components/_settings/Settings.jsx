@@ -1,12 +1,14 @@
 import { Outlet } from 'react-router'
-import Typography from '@mui/material/Typography'
+import {Container, Grid } from '@mui/material'
 
 const Settings = () => {
+
   return (
-    <>
-    <Typography variant="h6" color="secondary">Settings</Typography>
-    <Outlet/>
-    </>
+    <Container maxWidth="xl">
+      <Grid container spacing={1} margin={0} pt={3}>
+        <Outlet />
+      </Grid>
+    </Container>
   )
 }
 
