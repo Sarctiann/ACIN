@@ -189,7 +189,13 @@ const Complete = (props) => {
                 </RadioGroup>
               </FormControl>
             </Grid>
-            <Grid item xs={12} md={4}></Grid>
+            <Grid item xs={4}>
+              <Typography variant='h5' color='initial'
+                sx={{ display: { xs: 'none', md: 'flex' } }}
+              >
+                complete calculator
+              </Typography>
+            </Grid>
             <Grid item xs={12} md={4}>
               <TextField fullWidth size='small' type='number'
                 label={sign === 'pri' ? 'Price' : 'Percentage'}

@@ -15,6 +15,7 @@ for its implementation I chose
 
 ### *TODO:*
 + Refactor axios functions
++ Refactor http methods
 
 
 ***

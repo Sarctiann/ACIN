@@ -125,6 +125,7 @@ const Panel = (props) => {
     <Grid item xs={12} md={5}>
       <Box sx={{ paddingBlockEnd: 2, height: '80vh' }}
         border={2} p={2} borderRadius={1} borderColor='secondary.main'
+        backgroundColor='#323232'
       >
         <Grid container spacing={1} align='center' pr={2} alignItems='center'
           sx={{ height: '75vh', overflow: 'auto' }}

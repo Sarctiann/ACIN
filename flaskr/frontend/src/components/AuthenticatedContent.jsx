@@ -87,9 +87,10 @@ const AuthenticatedContent = (props) => {
           }
         })()
       }
-    }, 60 * 60 * 23 * 1000)
+    }, 60 * 60 * 1000)
     return () => {
       clearInterval(refreshing)
+      source.cancel('Abort refresh token')
     }
   }, [user, setUser])
 
