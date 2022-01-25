@@ -5,7 +5,7 @@ import {
   Typography, Button, Grid, TextField, Container, Alert, Fade
 } from '@mui/material'
 
-import { UserContext } from '../tools/contexts'
+import { UserContext, UserSettingsContext } from '../tools/contexts'
 import { api_url } from '../tools/routes'
 
 const UserLogin = () => {
@@ -15,12 +15,16 @@ const UserLogin = () => {
   const [loginState, setLoginState] = useState('')
 
   const { user, setUser } = useContext(UserContext)
+  const { setUserSettings } = useContext(UserSettingsContext)
   const navigate = useNavigate()
   const location = useLocation()
 
   useEffect(() => {
     if (user) {
-      navigate(location.pathname === '/login' ? '/news' : location.pathname)
+      navigate(
+        location.pathname === '/login' ? '/news' : location.pathname,
+        { replace: true }
+      )
     }
   })
 
@@ -34,7 +38,7 @@ const UserLogin = () => {
 
   const handleLogin = async e => {
     e.preventDefault()
-    const path = location.pathname === '/login' ? -1 : location.pathname
+    const path = location.pathname === '/login' ? '/news' : location.pathname
 
     try {
       let res = await axios.post(
@@ -45,7 +49,8 @@ const UserLogin = () => {
         }
       )
       if (res.data['user']) {
-        setUser({ ...res.data['user'], username: uName })
+        setUser({ ...res.data.user, username: uName })
+        setUserSettings({ ...res.data.settings })
       } else {
         setUName('')
         setUPass('')

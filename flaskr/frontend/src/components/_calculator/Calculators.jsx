@@ -8,15 +8,16 @@ import Complete from './Complete'
 import Basic from './Basic'
 import CalcHistory from './CalcHistory'
 import { api_url } from '../tools/routes'
-import { UserContext } from '../tools/contexts'
+import { UserContext, UserSettingsContext } from '../tools/contexts'
 
 const Calculator = () => {
 
   const { user } = useContext(UserContext)
+  const { userSettings } = useContext(UserSettingsContext)
   const [message, setMessage] = useState({ msg: '', vnt: '' })
   const [history, setHistory] = useState([])
   const [openSB, setOpenSB] = useState(false)
-  const [basic, setBasic] = useState(true)
+  const [basic, setBasic] = useState(Boolean(userSettings?.calculator))
 
   useEffect(() => {
     const source = axios.CancelToken.source();

@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flaskr.extensions import jwt
-from .models import Users
+from .models import Users, UserSettings
 
 
 users_api_v1 = Blueprint('users', __name__, url_prefix='/users')
@@ -20,6 +20,10 @@ def signin():
 
     try:
         user = Users.objects(username=data.get('username')).first()
+        sett = UserSettings.objects(owner=user).first()
+        if not sett:
+            sett = UserSettings(owner=user)
+            sett.save()
         if user and check_password_hash(user.password, data.get('password')):
             return jsonify({
                 'user': {
@@ -28,7 +32,8 @@ def signin():
                     'email': user.email,
                     'is_admin': user.is_admin,
                     'token': jwt.create_jwt(identity=user.username)
-                }
+                },
+                'settings': sett
             })
         else:
             return jsonify({'msg': 'Invalid Credentials'})
@@ -119,9 +124,10 @@ def signup():
                     email=data.get('email'),
                     first_name=data.get('first_name'),
                     last_name=data.get('last_name'),
-                    is_admin=data.get('is_admin')
+                    is_admin=data.get('is_admin', False)
                 )
                 user.save()
+                UserSettings(owner=user).save()
                 return jsonify({
                     'msg': 'user_created'
                 })
@@ -145,6 +151,7 @@ def get_users():
 
     username = jwt.get_jwt()['sub']['identity']
     users = Users.objects(username__ne=username)
+    print(users[0]['username'])
     user_response = []
 
     for user in users:
@@ -224,6 +231,7 @@ def delete_other_user():
         if user:
             try:
                 user.delete()
+                UserSettings(owner=user).delete()
                 return jsonify({
                     'msg': 'User Deleted'
                 })
@@ -239,3 +247,39 @@ def delete_other_user():
         return jsonify({
             'err': f"User NOT Deleted: Not permission to perform this operation"
         })
+
+
+@users_api_v1.put('/update-user-settings')
+@jwt.jwt_required
+def update_user_settings():
+
+    identity = jwt.get_jwt().get('sub')
+    res = {}
+
+    if identity:
+        data = request.get_json().get('settings')
+        if data:
+            user = Users.objects(email=identity['email']).first()
+            sett = (
+                UserSettings.objects(owner=user).first()
+                or
+                UserSettings(owner=user)
+            )
+            print(user.username)
+            if sett:
+                try:
+                    for k, v in data.items():
+                        sett[k] = v
+                    sett.save()
+                    res['msg'] = 'Settings Updated'
+                    res['settings'] = sett
+                except Exception as e:
+                    res['err'] = str(e)
+            else:
+                res['err'] = 'Invalid User Settings'
+        else:
+            res['err'] = 'Invalid Data'
+    else:
+        res['err'] = 'Invalid Identity'
+
+    return jsonify(res)

@@ -5,6 +5,7 @@ import {
 
 import { UserContext } from '../tools/contexts'
 import UpdateUserForm from './UpdateUserFrom'
+import UserOptions from './UserOptions'
 import OtherUsersList from './OtherUsersList'
 import CreateUpdateOtherUser from './CreateUpdateOtherUser'
 
@@ -37,6 +38,8 @@ const UserAccount = () => {
             user={user}
             setUser={setUser}
           />
+
+          <UserOptions />
 
           {user.is_admin && <>
             <OtherUsersList

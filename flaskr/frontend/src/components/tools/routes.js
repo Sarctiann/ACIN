@@ -10,7 +10,7 @@ export const routes = [
 export const sub_routes = [
     'answers',
     'calculator',
-    'regexs'
+    'expressions'
   ]
 
 const host = 'http://localhost:5000'

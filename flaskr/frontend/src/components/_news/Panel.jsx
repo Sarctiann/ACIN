@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import {
-  Typography, Grid, Box, Divider, TextField, Button, useMediaQuery
+  Typography, Grid, Box, Divider, TextField, Button, useMediaQuery, Paper
 } from '@mui/material';
 import { Send } from '@mui/icons-material'
 import PostSelect from './PostSelect'
@@ -123,81 +123,82 @@ const Panel = (props) => {
 
   return (
     <Grid item xs={12} md={5}>
-      <Box sx={{ paddingBlockEnd: 2, height: '80vh' }}
-        border={2} p={2} borderRadius={1} borderColor='secondary.main'
-        backgroundColor='#323232'
-      >
-        <Grid container spacing={1} align='center' pr={2} alignItems='center'
-          sx={{ height: '75vh', overflow: 'auto' }}
+      <Paper elevation={3}>
+        <Box sx={{ paddingBlockEnd: 2, height: '80vh' }}
+          border={2} p={2} borderRadius={1} borderColor='secondary.main'
         >
-          <Grid item xs={6}>
-            <PostSelect
-              options={['All', 'Urgent', 'Normal', 'Reminder']}
-              option={severity}
-              setOption={setSeverity}
-            />
+          <Grid container spacing={1} align='center' pr={2} alignItems='center'
+            sx={{ height: '75vh', overflow: 'auto' }}
+          >
+            <Grid item xs={6}>
+              <PostSelect
+                options={['All', 'Urgent', 'Normal', 'Reminder']}
+                option={severity}
+                setOption={setSeverity}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <PostSelect
+                options={['from All', 'Mine only']}
+                option={owner}
+                setOption={setOwner}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Divider>
+                <Typography color='secondary'>CREATE NEW POST</Typography>
+              </Divider>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField fullWidth size='small' label='Title'
+                name='title'
+                value={newPost.title}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth {...ROWS} multiline size='small' label='Content'
+                name='content'
+                value={newPost.content}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={7} md={3}>
+              <PostSelect
+                options={['Urgent', 'Normal', 'Reminder']}
+                option={newSeverity}
+                setOption={setNewSeverity}
+              />
+            </Grid>
+            <Grid item xs={5} md={3}>
+              <PostSelect
+                options={['to Me', 'to All']}
+                option={to}
+                setOption={setTo}
+              />
+            </Grid>
+            <Grid item xs={7} md={3}>
+              <TextField fullWidth label='within days' size='small'
+                name='days_offset'
+                type='number'
+                inputProps={{ min: '0', max: '7', step: '1' }}
+                value={newPost.days_offset}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={5} md={3}>
+              <Button variant='contained' fullWidth size='small'
+                onClick={handleSend} {...send_props} endIcon={<Send />}
+              >
+                <Typography variant='h6'>
+                  Send
+                </Typography>
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <PostSelect
-              options={['from All', 'Mine only']}
-              option={owner}
-              setOption={setOwner}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Divider>
-              <Typography color='secondary'>CREATE NEW POST</Typography>
-            </Divider>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField fullWidth size='small' label='Title'
-              name='title'
-              value={newPost.title}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth {...ROWS} multiline size='small' label='Content'
-              name='content'
-              value={newPost.content}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={7} md={3}>
-            <PostSelect
-              options={['Urgent', 'Normal', 'Reminder']}
-              option={newSeverity}
-              setOption={setNewSeverity}
-            />
-          </Grid>
-          <Grid item xs={5} md={3}>
-            <PostSelect
-              options={['to Me', 'to All']}
-              option={to}
-              setOption={setTo}
-            />
-          </Grid>
-          <Grid item xs={7} md={3}>
-            <TextField fullWidth label='within days' size='small'
-              name='days_offset'
-              type='number'
-              inputProps={{ min: '0', max: '7', step: '1' }}
-              value={newPost.days_offset}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={5} md={3}>
-            <Button variant='contained' fullWidth size='small'
-              onClick={handleSend} {...send_props} endIcon={<Send />}
-            >
-              <Typography variant='h6'>
-                Send
-              </Typography>
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      </Paper>
     </Grid>
   )
 }

@@ -60,11 +60,11 @@ const Navbar = () => {
       { label: 'Calculator Settings', sub_route: sub_routes[1] }
     )
   }
-  items.push({ label: 'Regexs Settings', sub_route: sub_routes[2] })
+  items.push({ label: 'Expressions Settings', sub_route: sub_routes[2] })
 
 return (
   <>
-    <AppBar position='sticky'>
+    <AppBar position='sticky' color='default'>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
 
         <NavMenu setTabValue={setTabValue} disabled={disabled}

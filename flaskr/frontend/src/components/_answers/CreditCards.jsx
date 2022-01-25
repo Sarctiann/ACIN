@@ -5,7 +5,7 @@ import {
 } from '@mui/material'
 import { ContentCopy } from '@mui/icons-material'
 
-import { useAxiosEffect } from '../tools/axiosTool'
+import strFormat from '../tools/strFormat'
 
 
 const CustomCell = (props) => {
@@ -23,17 +23,9 @@ const CustomCell = (props) => {
 
 const CreditCards = (props) => {
 
-  const { handleMessage } = props
+  const { payMeths, sysRegex, handleMessage } = props
 
-  const [payMeths, setPayMeths] = useState([])
   const [price, setPrice] = useState('')
-
-  useAxiosEffect(
-    '/answers/get-payment-methods', 'payment_methods',
-    (d) => { setPayMeths(d.payment_methods) },
-    (d) => { handleMessage(d.wrn, 'warning') },
-    (d) => { handleMessage(d.err, 'error') }
-  )
 
   const paymentMethods = useMemo(() => {
 
@@ -73,9 +65,10 @@ const CreditCards = (props) => {
 
 
   const handleCopy = (item) => {
+
     (async () => {
       navigator.clipboard.writeText(
-        `${item.installments} cuotas de ${item.monthly}`
+        strFormat(`${item.installments} ${item.monthly}`, sysRegex)
       )
     })()
     handleMessage('Text Copied to Clipboard', 'success')
@@ -113,7 +106,7 @@ const CreditCards = (props) => {
             <Paper elevation={3} sx={{ borderRadius: '15px 15px 0px 0px' }}>
               <Paper elevation={3} sx={{
                 borderRadius: '15px 15px 0px 0px',
-                backgroundColor: '#553311',
+                backgroundColor: 'warning.dark',
                 height: 40
               }}
               >
@@ -121,7 +114,9 @@ const CreditCards = (props) => {
                   Card Name
                 </Typography>
               </Paper>
-              <TableContainer sx={{ height: '60vh' }}>
+              <TableContainer
+                sx={{ height: { xs: '57vh', md: '60vh' } }}
+              >
                 <Table stickyHeader size='small'>
                   <TableHead>
                     <TableRow>
@@ -129,12 +124,12 @@ const CreditCards = (props) => {
                         Installments
                       </CustomCell>
                       <CustomCell width='20%'
-                        sx={{ backgroundColor: '#662222' }}
+                        sx={{ backgroundColor: 'error.dark' }}
                       >
                         Total
                       </CustomCell>
                       <CustomCell width='20%'
-                        sx={{ backgroundColor: '#444422' }}
+                        sx={{ backgroundColor: 'success.dark' }}
                       >
                         Monthly
                       </CustomCell>
@@ -156,7 +151,7 @@ const CreditCards = (props) => {
                           <CustomCell width='100%' colSpan={6}
                             sx={{
                               borderRadius: '20px 20px 0px 0px',
-                              backgroundColor: '#775533'
+                              backgroundColor: 'warning.dark'
                             }}
                           >
                             {item.header}
@@ -172,12 +167,12 @@ const CreditCards = (props) => {
                               {item.installments}
                             </CustomCell>
                             <CustomCell
-                              sx={{ backgroundColor: '#773333' }}
+                              sx={{ backgroundColor: 'error.dark' }}
                             >
                               ${item.total}
                             </CustomCell>
                             <CustomCell
-                              sx={{ backgroundColor: '#555533' }}
+                              sx={{ backgroundColor: 'success.dark' }}
                             >
                               ${item.monthly}
                             </CustomCell>
@@ -188,7 +183,7 @@ const CreditCards = (props) => {
                               *{item.pos_code}*
                             </CustomCell>
                             <CustomCell>
-                              <IconButton size='small' color='info'
+                              <IconButton size='small' color='primary'
                                 onClick={() => handleCopy(item)}
                               >
                                 <ContentCopy fontSize='small' />

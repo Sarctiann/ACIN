@@ -47,7 +47,7 @@ const CreateUpdateOtherUser = (props) => {
 
   const handleCreateOtherUser = () => {
     for (let [field, value] of Object.entries(otherUserData)) {
-      if (!value) {
+      if (value === '') {
         setUsersState({ msg: `Missing Value ${field}`, vnt: 'error' })
         setTimeout(() => {
           setUsersState({ msg: '', vnt: 'error' })

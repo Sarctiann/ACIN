@@ -39,7 +39,7 @@ const CalcHistory = (props) => {
       <Box sx={{
         paddingBlockEnd: 2,
         height: '75vh',
-        backgroundColor: 'primary.dark'
+        backgroundColor: 'info.main'
       }} borderRadius={3} p={2}>
         <Grid container spacing={1} align='center' pr={2} alignItems='top'
           alignContent='flex-start'
@@ -65,7 +65,7 @@ const CalcHistory = (props) => {
 
               let tColor
               if (item !== 1) {
-                tColor = { color: 'primary.main' }
+                tColor = { color: 'info.light' }
               }
 
               component = (

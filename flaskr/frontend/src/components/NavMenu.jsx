@@ -31,7 +31,7 @@ const NavMenu = props => {
     )
   }
   items.push(
-    { label: 'Regexs Settings', route: `${routes[3]}/${sub_routes[2]}` }
+    { label: 'Expressions Settings', route: `${routes[3]}/${sub_routes[2]}` }
   )
 
   const navigate = useNavigate()

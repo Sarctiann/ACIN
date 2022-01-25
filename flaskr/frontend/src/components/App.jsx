@@ -1,7 +1,7 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { cyan, orange } from "@mui/material/colors"
+import { cyan, deepOrange, deepPurple } from "@mui/material/colors"
 import { Paper, CssBaseline } from "@mui/material"
 
 import Navbar from './NavBar'
@@ -14,25 +14,43 @@ import Answers from './_answers/Answers'
 import Settings from './_settings/Settings'
 import AnswersSettings from './_settings/answers/AnswersSettings'
 import CalculatorSettings from './_settings/calculator/CalculatorSettings'
-import RegexsSettings from './_settings/regexs/RegexsSettings'
+import ExpressionsSettings from './_settings/expressions/ExpressionsSettings'
 import UserLogin from './_user/UserLogin'
 import UserAccount from './_user/UserAccount'
 
-import { UserContext, AuthContext } from './tools/contexts'
-
-
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: cyan,
-    secondary: orange
-  }
-})
+import { UserContext, AuthContext, UserSettingsContext } from './tools/contexts'
 
 const App = () => {
 
   const { user, setUser } = useContext(UserContext)
   const { auth, setAuth } = useContext(AuthContext)
+  const { userSettings } = useContext(UserSettingsContext)
+
+  const theme = useMemo(() =>
+    userSettings.theme_mode !== 'light' ?
+      createTheme({
+        palette: {
+          mode: 'dark',
+          primary: cyan,
+          secondary: deepOrange,
+          info: deepPurple
+        }
+      })
+      :
+      createTheme({
+        palette: {
+          mode: userSettings.theme_mode,
+          primary: cyan,
+          secondary: deepOrange,
+          info: deepPurple,
+          background: {
+            paper: '#eaeaea',
+            default: '#fafafa'
+          }
+        }
+      })
+    , [userSettings.theme_mode]
+  )
 
   useEffect(() => {
     if (user?.token) {
@@ -61,7 +79,7 @@ const App = () => {
                   <Route
                     path={sub_routes[1]} element={<CalculatorSettings />} />
                   <Route
-                    path={sub_routes[2]} element={<RegexsSettings />} />
+                    path={sub_routes[2]} element={<ExpressionsSettings />} />
                 </Route>
                 <Route path={'login'} element={<UserLogin />} />
                 <Route path={'account'} element={<UserAccount />} />

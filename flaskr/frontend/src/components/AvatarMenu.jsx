@@ -49,10 +49,10 @@ const AvatarMenu = props => {
 
   const handleLogout = () => {
     setAnchorEl(null)
-    navigate('/login')
     setUser(null)
     setAuth(false)
     localStorage.removeItem('user')
+    localStorage.removeItem('settings')
   }
 
   return (
