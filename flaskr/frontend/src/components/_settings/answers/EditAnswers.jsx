@@ -92,7 +92,7 @@ const EditAnswers = (props) => {
   return (
     <Grid item xs={12}>
       <Paper elevation={3}>
-        <Box sx={{ paddingBlockEnd: 2, height: '80vh' }}
+        <Box sx={{ paddingBlockEnd: 2, minHeight: '80vh' }}
           border={2} p={2} borderRadius={1} borderColor='secondary.main'
         >
           <Grid container spacing={1} align='center' pr={2}>

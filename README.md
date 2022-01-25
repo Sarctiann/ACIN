@@ -14,8 +14,10 @@ for its implementation I chose
 ***
 
 ### *TODO:*
-+ Refactor axios functions
-+ Refactor http methods
++ Refactor axios functions (the rest)
++ Refactor http methods (the first ones)
++ Automate notifications on "Credit Cards", "Answers" and "Calculator Table"
+modifications
 
 
 ***

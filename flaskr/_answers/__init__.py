@@ -562,15 +562,9 @@ def update_expression():
                         id=expression.get('id'), owner=owner
                     ).first()
                 exp.update(
-                    identifier=expression.get(
-                        'identifier', expression.identifier
-                    ),
-                    pattern=Color[expression.get(
-                        'pattern', expression.pattern
-                    )],
-                    replacement=expression.get(
-                        'replacement', expression.replacement
-                    )
+                    identifier=expression.get('identifier', exp.identifier),
+                    pattern=expression.get('pattern', exp.pattern),
+                    replacement=expression.get('replacement', exp.replacement)
                 )
 
                 res['msg'] = 'Expression updated'

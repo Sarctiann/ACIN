@@ -1,5 +1,6 @@
 const strFormat = (str, regexs, args) => {
 
+
   let mut_str = str
   if (regexs !== undefined) {
     regexs.forEach(({ pattern, replacement }) => {

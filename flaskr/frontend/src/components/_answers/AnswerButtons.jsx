@@ -8,7 +8,7 @@ import strFormat from '../tools/strFormat'
 
 const AnswerButtons = (props) => {
 
-  const { commonAnswers, ownAnswers, OwnRegex, handleMessage } = props
+  const { commonAnswers, ownAnswers, ownRegex, handleMessage } = props
 
   const [text, setText] = useState('')
 
@@ -30,7 +30,7 @@ const AnswerButtons = (props) => {
   const handleCopy = () => {
     (async () => {
       navigator.clipboard.writeText(
-        strFormat(text, OwnRegex, answerList)
+        strFormat(text, ownRegex, answerList)
       )
     })()
     handleMessage('Formatted Text Copied to Clipboard', 'success')
