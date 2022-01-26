@@ -9,6 +9,7 @@ from .tools import (
 )
 from .models import History, DatesPercents, Lists
 from flaskr._users.models import Users
+from flaskr._news.models import Posts, NewestPosts
 
 calculator_api_v1 = Blueprint('calculator', __name__, url_prefix='/calculator')
 
@@ -256,7 +257,8 @@ def get_history():
 @jwt.jwt_required
 def load_list():
 
-    identity = jwt.get_jwt()
+    identity = jwt.get_jwt()['sub']
+    owner = Users.objects(email=identity['email']).first()
     res = {}
 
     if identity:
@@ -266,6 +268,14 @@ def load_list():
                 DatesPercents.objects().delete()
                 upload_data(list_name)
                 res['msg'] = f'{list_name} loaded'
+                
+                Posts(
+                    owner=owner,
+                    title='Calculator Table Changed',
+                    content=f"",
+                    severity='urg', is_public=True
+                ).save()
+                NewestPosts(owner=owner).save()
 
             except Exception as e:
                 res['err'] = str(e)
@@ -281,6 +291,15 @@ def load_list():
                 upload_data(list_name)
                 res['msg'] = f'{list_name} created and loaded'
                 res['new_list'] = list_name
+
+                Posts(
+                    owner=owner,
+                    title='Calculator Table Changed',
+                    content=f"",
+                    severity='urg', is_public=True
+                ).save()
+                NewestPosts(owner=owner).save()
+                
             except Exception as e:
                 res['err'] = str(e)
         else:

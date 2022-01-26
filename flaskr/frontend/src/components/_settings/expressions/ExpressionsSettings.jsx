@@ -41,7 +41,7 @@ const ExpressionsSettings = () => {
     const { name, value, checked } = e.target
     setExpression({
       ...expression,
-      [name]: name !== 'common' ? value : checked
+      [name]: name !== 'is_system' ? value : checked
     })
   }
 
@@ -95,13 +95,13 @@ const ExpressionsSettings = () => {
 
   return (
     <>
-      <Grid item xs={12}>
-        <Paper elevation={10}>
+      <Grid item xs={12} md={6}>
+        <Paper elevation={7}>
           <Box sx={{ paddingBlockEnd: 2, minHeight: '80vh' }}
-            border={2} p={2} borderRadius={1} borderColor='secondary.main'
+            border={2} p={2} borderRadius={1} borderColor='info.main'
           >
             <Grid container spacing={1} align='center' pr={2}>
-              <Grid item xs={12} md={9}>
+              <Grid item xs={12} md={8}>
                 <TextField size='small' label='Identifier' color='warning'
                   fullWidth name='identifier'
                   value={expression.identifier}
@@ -110,7 +110,7 @@ const ExpressionsSettings = () => {
               </Grid>
 
               {user?.is_admin && !edit &&
-                <Grid item xs={12} md={2}>
+                <Grid item xs={12} md={3}>
                   <FormControlLabel control={
                     <Switch
                       name='is_system'

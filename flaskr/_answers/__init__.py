@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify
 from flaskr.extensions import jwt
 from flaskr._users.models import Users
 from .models import PaymentMethods, Answers, Color, Expressions
+from flaskr._news.models import Posts, NewestPosts
 
 
 answers_api_v1 = Blueprint('answers', __name__, url_prefix='/answers')
@@ -130,6 +131,7 @@ def create_payment_method():
 def update_method():
 
     identity = jwt.get_jwt().get('sub')
+    owner = Users.objects(email=identity['email']).first()
     res = {}
 
     if identity and identity.get('is_admin'):
@@ -150,6 +152,13 @@ def update_method():
                         description=data.get(
                             'description', method.description)
                     )
+                    Posts(
+                        owner=owner,
+                        title='Payment methods changed',
+                        content=f"",
+                        severity='nor', is_public=True
+                    ).save()
+                    NewestPosts(owner=owner).save()
                     res['msg'] = 'Payment method updated'
                     res['payment_methods'] = PaymentMethods.objects().order_by(
                         'card_name', 'installments'
@@ -171,6 +180,7 @@ def update_method():
 def delete_method():
 
     identity = jwt.get_jwt().get('sub')
+    owner = Users.objects(email=identity['email']).first()
     res = {}
 
     if identity and identity.get('is_admin'):
@@ -184,6 +194,13 @@ def delete_method():
                     res['payment_methods'] = PaymentMethods.objects().order_by(
                         'card_name', 'installments'
                     )
+                    Posts(
+                        owner=owner,
+                        title='Payment methods changed',
+                        content=f"",
+                        severity='nor', is_public=True
+                    ).save()
+                    NewestPosts(owner=owner).save()
                 except Exception as e:
                     res['err'] = str(e)
             else:
@@ -203,6 +220,7 @@ def delete_method():
 def update_credit_card():
 
     identity = jwt.get_jwt().get('sub')
+    owner = Users.objects(email=identity['email']).first()
     res = {}
 
     if identity and identity.get('is_admin'):
@@ -217,6 +235,13 @@ def update_credit_card():
                     res['payment_methods'] = PaymentMethods.objects().order_by(
                         'card_name', 'installments'
                     )
+                    Posts(
+                        owner=owner,
+                        title='Payment methods changed',
+                        content=f"",
+                        severity='nor', is_public=True
+                    ).save()
+                    NewestPosts(owner=owner).save()
                 except Exception as e:
                     res['err'] = str(e)
             else:
@@ -234,6 +259,7 @@ def update_credit_card():
 def delete_credit_card():
 
     identity = jwt.get_jwt().get('sub')
+    owner = Users.objects(email=identity['email']).first()
     res = {}
 
     if identity and identity.get('is_admin'):
@@ -247,6 +273,13 @@ def delete_credit_card():
                     res['payment_methods'] = PaymentMethods.objects().order_by(
                         'card_name', 'installments'
                     )
+                    Posts(
+                        owner=owner,
+                        title='Payment methods changed',
+                        content=f"",
+                        severity='nor', is_public=True
+                    ).save()
+                    NewestPosts(owner=owner).save()
                 except Exception as e:
                     res['err'] = str(e)
             else:
@@ -319,6 +352,14 @@ def create_answer():
                 )
                 if identity.get('is_admin'):
                     ans.common = answer.get('common', False)
+                    if answer.get('common'):
+                        Posts(
+                            owner=owner,
+                            title='Answer Added',
+                            content=f"",
+                            severity='nor', is_public=True
+                        ).save()
+                        NewestPosts(owner=owner).save()
                 ans.save()
 
                 res['msg'] = 'Answer stored'
@@ -375,6 +416,14 @@ def update_answer():
                     content=answer.get('content', ans.content),
                     order=answer.get('order', ans.order)
                 )
+                if ans.common:
+                    Posts(
+                        owner=owner,
+                        title='Answers Changed',
+                        content=f"",
+                        severity='nor', is_public=True
+                    ).save()
+                    NewestPosts(owner=owner).save()
 
                 res['msg'] = 'Answer updated'
                 common_answers = Answers.objects(common=True).order_by('order')
@@ -424,6 +473,14 @@ def delete_answer():
                     ans = Answers.objects(
                         owner=owner, id=answer.get('id')
                     ).first()
+                if ans.common:
+                    Posts(
+                        owner=owner,
+                        title='Answers Changed',
+                        content=f"",
+                        severity='nor', is_public=True
+                    ).save()
+                    NewestPosts(owner=owner).save()
                 ans.delete()
 
                 res['msg'] = 'Answer deleted'
@@ -513,6 +570,14 @@ def create_expression():
                 )
                 if identity.get('is_admin'):
                     exp.is_system = expression.get('is_system', False)
+                    if exp.is_system:
+                        Posts(
+                            owner=owner,
+                            title='Expression Added',
+                            content=f"",
+                            severity='nor', is_public=True
+                        ).save()
+                        NewestPosts(owner=owner).save()
                 exp.save()
 
                 res['msg'] = 'Expression stored'
@@ -566,6 +631,14 @@ def update_expression():
                     pattern=expression.get('pattern', exp.pattern),
                     replacement=expression.get('replacement', exp.replacement)
                 )
+                if exp.is_system:
+                    Posts(
+                        owner=owner,
+                        title='Expression Changed',
+                        content=f"",
+                        severity='nor', is_public=True
+                    ).save()
+                    NewestPosts(owner=owner).save()
 
                 res['msg'] = 'Expression updated'
                 sys_regex = Expressions.objects(is_system=True)
@@ -613,6 +686,14 @@ def delete_expression():
                     exp = Expressions.objects(
                         owner=owner, id=expression.get('id')
                     ).first()
+                if exp.is_system:
+                    Posts(
+                        owner=owner,
+                        title='Expression Added',
+                        content=f"",
+                        severity='nor', is_public=True
+                    ).save()
+                    NewestPosts(owner=owner).save()
                 exp.delete()
 
                 res['msg'] = 'Expression deleted'
