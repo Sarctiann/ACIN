@@ -21,12 +21,14 @@ def fetch_posts():
     # Get newest post from database and format it removing microseconds
     newest_post = NewestPosts.objects().order_by(
         '-time_stamp'
-    ).first()['time_stamp'].replace(microsecond=0)
+    ).first()
+    if newest_post:
+        newest_post = newest_post['time_stamp'].replace(microsecond=0)
     # Get latest post from request
     last_post = request.get_json()['last_post']
     # Validate conditon to retrieve posts
     return_posts = True
-    if last_post:
+    if last_post and newest_post:
         if dt.strptime(last_post, "%a, %d %b %Y %H:%M:%S %Z") == newest_post:
             return_posts = False
     res = {}

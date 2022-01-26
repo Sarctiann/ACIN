@@ -3,6 +3,7 @@ import datetime as dt
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 JWT_SECRET_KEY = SECRET_KEY
+
 MONGODB_SETTINGS = {
 
     #BASIC:
