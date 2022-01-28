@@ -145,7 +145,7 @@ const CreateUpdateOtherUser = (props) => {
           <Grid container spacing={2} margin={0} px={{ xs: 0, md: 3 }}>
             <Grid item>
               <Typography variant="h6" color="primary">
-                Update My User Account
+                Update/Create User Account
               </Typography>
             </Grid>
             {!edit ? <>

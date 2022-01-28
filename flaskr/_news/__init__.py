@@ -95,7 +95,7 @@ def delete_post():
     identity = jwt.get_jwt()['sub']['email']
     user = Users.objects(email=identity).first()
     post_id = dt.fromtimestamp(
-        request.get_json()['$date'] / 1000) #+ td(hours=3)
+        request.get_json()['$date'] / 1000) # + td(hours=3)
     res = {}
 
     post = Posts.objects(created_at=post_id).first()
