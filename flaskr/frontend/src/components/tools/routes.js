@@ -13,7 +13,7 @@ export const sub_routes = [
     'expressions'
   ]
 
-const host = 'http://localhost:5000'
+const host = 'https://audiocenter-in.herokuapp.com/'
 
 const api_root = '/api-v1'
 
