@@ -64,6 +64,7 @@ const Answers = () => {
           <AnswerButtons
             commonAnswers={commonAnswers}
             ownAnswers={ownAnswers}
+            sysRegex={sysRegex}
             ownRegex={ownRegex}
             handleMessage={handleMessage}
           />

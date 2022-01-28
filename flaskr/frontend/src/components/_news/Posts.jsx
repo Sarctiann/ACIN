@@ -4,6 +4,8 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText
 } from '@mui/material';
 import { Alarm } from '@mui/icons-material'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import axios from 'axios'
 
 import { PostContext, UserContext } from '../tools/contexts'
@@ -149,7 +151,9 @@ const Posts = (props) => {
                       <Typography variant='body1'
                         sx={{ whiteSpace: 'pre-line' }}
                       >
-                        {element.content}
+                        <ReactMarkdown
+                          children={element.content} remarkPlugins={[remarkGfm]}
+                        />
                       </Typography>
                     </Alert>
                   </Grid>

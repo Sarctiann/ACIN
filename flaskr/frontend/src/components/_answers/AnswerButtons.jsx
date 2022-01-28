@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import {
-  Grid, Box, TextField, IconButton, Stack, Button, Typography
+  Grid, Box, TextField, IconButton, Stack, Button, Typography, Tooltip
 } from '@mui/material'
 import { ContentCopy, Cancel } from '@mui/icons-material'
 
@@ -8,7 +8,7 @@ import strFormat from '../tools/strFormat'
 
 const AnswerButtons = (props) => {
 
-  const { commonAnswers, ownAnswers, ownRegex, handleMessage } = props
+  const { commonAnswers, ownAnswers, sysRegex, ownRegex, handleMessage } = props
 
   const [text, setText] = useState('')
 
@@ -30,7 +30,7 @@ const AnswerButtons = (props) => {
   const handleCopy = () => {
     (async () => {
       navigator.clipboard.writeText(
-        strFormat(text, ownRegex, answerList)
+        strFormat(text, {...sysRegex, ...ownRegex}, answerList)
       )
     })()
     handleMessage('Formatted Text Copied to Clipboard', 'success')
@@ -57,15 +57,21 @@ const AnswerButtons = (props) => {
             />
           </Grid>
           <Grid item xs={12} md={1}>
-            <IconButton color='primary' onClick={handleCopy}>
-              <ContentCopy />
-            </IconButton>
-            <IconButton color='info' onClick={handleCopyRaw}>
-              <ContentCopy />
-            </IconButton>
-            <IconButton color='warning' onClick={() => setText('')}>
-              <Cancel />
-            </IconButton>
+            <Tooltip title='Copy Formated Text' placement='left'>
+              <IconButton color='primary' onClick={handleCopy}>
+                <ContentCopy />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='Copy Raw Text' placement='left'>
+              <IconButton color='info' onClick={handleCopyRaw}>
+                <ContentCopy />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='Unselect Answer' placement='left'>
+              <IconButton color='warning' onClick={() => setText('')}>
+                <Cancel />
+              </IconButton>
+            </Tooltip>
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant='h6'>
