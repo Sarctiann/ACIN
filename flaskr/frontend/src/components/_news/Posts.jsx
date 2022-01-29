@@ -143,7 +143,7 @@ const Posts = (props) => {
                 component = (
                   <Grid item key={element._id['$date']}>
                     <Alert variant='filled' {...post_props}
-                      style={{fontFamily:'Noto Sans', fontSize:'1em'}}
+                      style={{fontSize:'1em'}}
                     >
                       <AlertTitle>
                         <Typography variant='h5'>
