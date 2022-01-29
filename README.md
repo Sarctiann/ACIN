@@ -13,6 +13,11 @@ for its implementation I chose
 
 ***
 
+To make changes, remember:
+1. Do changes
+2. build
+3. stage, commit and push
+
 ### *TODO:*
 + Refactor axios functions (the rest)
 + Refactor http methods (the first ones)
