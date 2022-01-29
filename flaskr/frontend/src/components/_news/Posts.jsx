@@ -142,19 +142,17 @@ const Posts = (props) => {
                 }
                 component = (
                   <Grid item key={element._id['$date']}>
-                    <Alert variant='filled' {...post_props}>
+                    <Alert variant='filled' {...post_props}
+                      style={{fontFamily:'Noto Sans', fontSize:'1em'}}
+                    >
                       <AlertTitle>
                         <Typography variant='h5'>
                           {element.owner.username} - {element.title}
                         </Typography>
                       </AlertTitle>
-                      <Typography variant='body1'
-                        sx={{ whiteSpace: 'pre-line' }}
-                      >
-                        <ReactMarkdown
-                          children={element.content} remarkPlugins={[remarkGfm]}
-                        />
-                      </Typography>
+                      <ReactMarkdown
+                        children={element.content} remarkPlugins={[remarkGfm]}
+                      />
                     </Alert>
                   </Grid>
                 )

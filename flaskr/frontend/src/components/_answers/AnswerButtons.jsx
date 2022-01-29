@@ -30,7 +30,7 @@ const AnswerButtons = (props) => {
   const handleCopy = () => {
     (async () => {
       navigator.clipboard.writeText(
-        strFormat(text, {...sysRegex, ...ownRegex}, answerList)
+        strFormat(text, [...sysRegex, ...ownRegex], answerList)
       )
     })()
     handleMessage('Formatted Text Copied to Clipboard', 'success')
