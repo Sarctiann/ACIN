@@ -14,6 +14,8 @@ import {
 import { api_url } from '../tools/routes'
 import daysAgo from '../tools/daysAgo'
 
+import './markdownStyle.css'
+
 
 const Posts = (props) => {
 
@@ -156,7 +158,7 @@ const Posts = (props) => {
                           {element.owner.username} - {element.title}
                         </Typography>
                       </AlertTitle>
-                      <ReactMarkdown
+                      <ReactMarkdown className='markdownStyle'
                         children={element.content} remarkPlugins={[remarkGfm]}
                       />
                     </Alert>
