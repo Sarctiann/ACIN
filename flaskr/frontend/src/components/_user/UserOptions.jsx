@@ -1,7 +1,7 @@
 import { Fragment, useState, useContext } from 'react'
 import {
   Grid, Typography, Paper, Button, Switch, FormControlLabel, FormControl,
-  Select, MenuItem, Snackbar, Alert
+  Select, MenuItem, Snackbar, Alert, TextField
 } from '@mui/material'
 
 import { UserSettingsContext } from '../tools/contexts'
@@ -45,7 +45,7 @@ const UserOptions = (props) => {
 
   return (
     <Fragment {...props}>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} mt={2}>
         <Paper elevation={3}>
           <Grid container spacing={2} margin={0} px={{ xs: 0, md: 3 }}>
             <Grid item xs={12}>
@@ -53,7 +53,7 @@ const UserOptions = (props) => {
                 User Settings
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={11}>
               <FormControl fullWidth>
                 <Select size='small'
                   name='theme_mode'
@@ -76,6 +76,13 @@ const UserOptions = (props) => {
                 label='Basic Calculator for Default'
               />
             </Grid>
+            <Grid item xs={11}>
+              <TextField fullWidth size='small' label='Posts Font Family'
+                name='postsFontFamily'
+                value={settings.postsFontFamily}
+                onChange={handleChangeSettings}
+              />
+            </Grid>
             <Grid item xs={12} px={2} pb={2}>
               <RDialog
                 title='Save User Settings' confirmText='UPDATE'
@@ -83,7 +90,8 @@ const UserOptions = (props) => {
                 action={() => handleSaveSettings({
                   settings: {
                     theme_mode: settings.theme_mode,
-                    calculator: settings.calculator
+                    calculator: settings.calculator,
+                    postsFontFamily: settings.postsFontFamily
                   }
                 })}
               >

@@ -8,7 +8,9 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import axios from 'axios'
 
-import { PostContext, UserContext } from '../tools/contexts'
+import { 
+  PostContext, UserContext, UserSettingsContext 
+} from '../tools/contexts'
 import { api_url } from '../tools/routes'
 import daysAgo from '../tools/daysAgo'
 
@@ -18,6 +20,7 @@ const Posts = (props) => {
   const { filter: { severity, owner }, handleMessage } = props
   const { fetchedPosts } = useContext(PostContext)
   const { user } = useContext(UserContext)
+  const { userSettings } = useContext(UserSettingsContext)
   const [postToDelete, setPostToDelete] = useState('')
 
   const posts = useMemo(() => {
@@ -143,7 +146,10 @@ const Posts = (props) => {
                 component = (
                   <Grid item key={element._id['$date']}>
                     <Alert variant='filled' {...post_props}
-                      style={{fontFamily:'Helvetica', fontSize:'1em'}}
+                      style={{
+                        fontFamily: `${userSettings.postsFontFamily}, Helvetica`
+                        , fontSize:'1em'
+                      }}
                     >
                       <AlertTitle>
                         <Typography variant='h5'>

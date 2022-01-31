@@ -4,12 +4,13 @@ const useSettings = () => {
 
   const defaultSettings = {
     theme_mode: 'dark',
-    calculator: true
+    calculator: true,
+    postsFontFamily: 'Helvetica'
   }
   
   const getSettings = () => {
     const settingsStr = localStorage.getItem('settings');
-    const settingsObj = JSON.parse(settingsStr) || defaultSettings;
+    const settingsObj = {...defaultSettings, ...JSON.parse(settingsStr)};
     return settingsObj
   };
 

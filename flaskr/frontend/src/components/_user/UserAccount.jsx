@@ -32,37 +32,39 @@ const UserAccount = () => {
       <Grid item xs={12}>
         <Typography variant="h3" color="secondary">User Account</Typography>
       </Grid>
-        <Grid container spacing={2}>
+      <Grid container spacing={2}>
 
+        <Grid item xs={12} md={4}>
           <UpdateUserForm
             user={user}
             setUser={setUser}
           />
 
           <UserOptions />
-
-          {user.is_admin && <>
-            <OtherUsersList
-              user={user}
-              setEdit={setEdit}
-              usersSate={usersSate}
-              setUsersState={setUsersState}
-              initialOtherUser={initialOtherUser}
-              setOtherUserData={setOtherUserData}
-            />
-
-            <CreateUpdateOtherUser
-              user={user}
-              edit={edit}
-              setEdit={setEdit}
-              setUsersState={setUsersState}
-              initialOtherUser={initialOtherUser}
-              otherUserData={otherUserData}
-              setOtherUserData={setOtherUserData}
-            />
-          </>}
-
         </Grid>
+
+        {user.is_admin && <>
+          <OtherUsersList
+            user={user}
+            setEdit={setEdit}
+            usersSate={usersSate}
+            setUsersState={setUsersState}
+            initialOtherUser={initialOtherUser}
+            setOtherUserData={setOtherUserData}
+          />
+
+          <CreateUpdateOtherUser
+            user={user}
+            edit={edit}
+            setEdit={setEdit}
+            setUsersState={setUsersState}
+            initialOtherUser={initialOtherUser}
+            otherUserData={otherUserData}
+            setOtherUserData={setOtherUserData}
+          />
+        </>}
+
+      </Grid>
     </Container >
   )
 }

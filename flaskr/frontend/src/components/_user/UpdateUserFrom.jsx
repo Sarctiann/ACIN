@@ -152,7 +152,7 @@ const UpdateUserForm = (props) => {
 
   return (
     <Fragment {...others}>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12}>
         <Paper elevation={3}>
           <Grid container spacing={2} margin={0} px={{ xs: 0, md: 3 }}>
             <Grid item>

@@ -143,7 +143,7 @@ const EditAnswers = (props) => {
             }
             <Grid item xs={12} md={11}>
               <TextField label='Content' color='warning'
-                fullWidth multiline rows={4} name='content'
+                fullWidth multiline rows={5} name='content'
                 value={answer.content} onChange={handleChangeAnswer}
               />
             </Grid>
@@ -190,7 +190,7 @@ const EditAnswers = (props) => {
                   Commons
                 </Typography>
                 <Stack spacing={1} p={1}
-                  sx={{ paddingBlockEnd: 2, height: '45vh', overflow: 'auto' }}
+                  sx={{ paddingBlockEnd: 2, height: '40vh', overflow: 'auto' }}
                 >
                   {commonAnswers.map((ans) => {
                     return (
@@ -215,7 +215,7 @@ const EditAnswers = (props) => {
                 Own
               </Typography>
               <Stack spacing={1} p={1}
-                sx={{ paddingBlockEnd: 2, height: '45vh', overflow: 'auto' }}
+                sx={{ paddingBlockEnd: 2, height: '40vh', overflow: 'auto' }}
               >
                 {ownAnswers.map((ans) => {
                   return (
