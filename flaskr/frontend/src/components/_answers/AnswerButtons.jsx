@@ -78,7 +78,7 @@ const AnswerButtons = (props) => {
               Commons
             </Typography>
             <Stack spacing={1} p={1}
-              sx={{ paddingBlockEnd: 2, height: '50vh', overflow: 'auto' }}
+              sx={{ paddingBlockEnd: 2, height: '49vh', overflow: 'auto' }}
             >
               {commonAnswers.map((ans) => {
                 return (
@@ -102,7 +102,7 @@ const AnswerButtons = (props) => {
               Own
             </Typography>
             <Stack spacing={1} p={1}
-              sx={{ paddingBlockEnd: 2, height: '50vh', overflow: 'auto' }}
+              sx={{ paddingBlockEnd: 2, height: '49vh', overflow: 'auto' }}
             >
               {ownAnswers.map((ans) => {
                 return (

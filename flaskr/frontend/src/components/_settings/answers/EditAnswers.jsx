@@ -143,7 +143,7 @@ const EditAnswers = (props) => {
             }
             <Grid item xs={12} md={11}>
               <TextField label='Content' color='warning'
-                fullWidth multiline rows={5} name='content'
+                fullWidth multiline rows={4} name='content'
                 value={answer.content} onChange={handleChangeAnswer}
               />
             </Grid>

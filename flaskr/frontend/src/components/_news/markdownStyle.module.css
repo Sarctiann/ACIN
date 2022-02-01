@@ -1,0 +1,19 @@
+.mdStyle table {
+    border-collapse: collapse;
+}
+
+.mdStyle th {
+    padding: 0.2em;
+    border: 2px solid;
+}
+
+.mdStyle td {
+    padding: 0.2em;
+    border: 2px solid;
+}
+.mdStyle img {
+    margin-left: 2%;
+    border-radius: 5px;
+    max-width: 98%;
+    max-height: 75%;
+  }
