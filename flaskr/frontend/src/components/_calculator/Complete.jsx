@@ -61,7 +61,6 @@ const Complete = (props) => {
           }
         )
         if (res.data['result'] !== undefined) {
-          handleMessage(`$${res.data.result}`, 'success')
           setHistory([
             {
               _id: { $date: new Date().getTime() },
@@ -72,7 +71,14 @@ const Complete = (props) => {
           ])
           setFields({ ...fields, [to_set]: res.data.result })
           if (!data.expression) {
-            setExpression(res.data.result)
+            setExpression(res.data.result);
+            (async () => {navigator.clipboard.writeText(
+              `$${res.data.result}`
+            )})()
+            handleMessage(`$${res.data.result} Copied`, 'success')
+          } else {
+            (async () => {navigator.clipboard.writeText(res.data.result)})()
+            handleMessage(`${res.data.result} Copied`, 'success')
           }
         }
         if (res.data['err']) {

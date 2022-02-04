@@ -83,6 +83,15 @@ const UserOptions = (props) => {
                 onChange={handleChangeSettings}
               />
             </Grid>
+            <Grid item xs={11}>
+              <TextField fullWidth size='small' label='Notification Volume'
+                type='range'
+                inputProps={{ min: 0, max: 1, step: 0.1}}
+                name='notifVol'
+                value={settings.notifVol}
+                onChange={handleChangeSettings}
+              />
+            </Grid>
             <Grid item xs={12} px={2} pb={2}>
               <RDialog
                 title='Save User Settings' confirmText='UPDATE'
@@ -91,7 +100,8 @@ const UserOptions = (props) => {
                   settings: {
                     theme_mode: settings.theme_mode,
                     calculator: settings.calculator,
-                    postsFontFamily: settings.postsFontFamily
+                    postsFontFamily: settings.postsFontFamily,
+                    notifVol: parseFloat(settings.notifVol)
                   }
                 })}
               >

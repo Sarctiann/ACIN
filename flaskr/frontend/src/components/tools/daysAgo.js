@@ -3,6 +3,7 @@ const daysAgo = (today, date) => {
     let label
     switch (delta) {
         case '0':
+        case '-0':
             label = 'Today'
             break
         case '1':

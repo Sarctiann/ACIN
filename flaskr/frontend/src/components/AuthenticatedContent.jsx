@@ -1,17 +1,24 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import useSound from 'use-sound'
 
 import { api_url } from './tools/routes'
-import { PostContext } from './tools/contexts'
+import { PostContext, UserSettingsContext } from './tools/contexts'
+import beep from './tools/beep.mp3'
 
 const AuthenticatedContent = (props) => {
 
   const { children, setAuth, user, setUser } = props
 
-  const { setFetchedPosts } = useContext(PostContext)
+  const { fetchedPosts, setFetchedPosts } = useContext(PostContext)
+  const { userSettings } = useContext(UserSettingsContext)
   const [timeStamp, setTimeStamp] = useState(null)
   const navigate = useNavigate()
+  const soundOptions = useMemo(() => {
+    return { volume: parseFloat(userSettings.notifVol) }
+  }, [userSettings])
+  const [playBeep] = useSound(beep, soundOptions)
 
   useEffect(() => {
     const source = axios.CancelToken.source()
@@ -29,6 +36,9 @@ const AuthenticatedContent = (props) => {
           }
         )
         if (res.data['newest_post']) {
+          if (timeStamp !== null && res.data.posts.length > fetchedPosts) {
+            playBeep()
+          }
           setTimeStamp(res.data['newest_post'])
           setFetchedPosts(res.data['posts'])
         } else if (res.data['wrn']) {
@@ -60,7 +70,8 @@ const AuthenticatedContent = (props) => {
       clearInterval(watcher)
       source.cancel('Leaving News page or the data is already loaded')
     }
-  }, [user, setUser, setAuth, navigate, timeStamp, setFetchedPosts])
+    // eslint-disable-next-line
+  }, [user])
 
   useEffect(() => {
     const source = axios.CancelToken.source()

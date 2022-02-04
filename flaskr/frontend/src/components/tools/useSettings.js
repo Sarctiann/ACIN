@@ -5,7 +5,8 @@ const useSettings = () => {
   const defaultSettings = {
     theme_mode: 'dark',
     calculator: true,
-    postsFontFamily: 'Helvetica'
+    postsFontFamily: 'Helvetica',
+    notifVol: 0.1
   }
   
   const getSettings = () => {

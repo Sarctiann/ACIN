@@ -155,7 +155,7 @@ def update_method():
                     Posts(
                         owner=owner,
                         title='Payment methods changed',
-                        content=f"",
+                        content=f'{method.card_name} -> {method.installments}',
                         severity='nor', is_public=True
                     ).save()
                     NewestPosts(owner=owner).save()
@@ -189,17 +189,19 @@ def delete_method():
             method = PaymentMethods.objects(id=data['id']).first()
             if method:
                 try:
+                    cnt = f'{method.card_name} {method.installments} **Deleted**'
+                    post = Posts(
+                        owner=owner,
+                        title='Payment methods changed',
+                        content=cnt,
+                        severity='nor', is_public=True
+                    )
                     method.delete()
+                    post.save()
                     res['msg'] = 'Payment method deleted'
                     res['payment_methods'] = PaymentMethods.objects().order_by(
                         'card_name', 'installments'
                     )
-                    Posts(
-                        owner=owner,
-                        title='Payment methods changed',
-                        content=f"",
-                        severity='nor', is_public=True
-                    ).save()
                     NewestPosts(owner=owner).save()
                 except Exception as e:
                     res['err'] = str(e)
@@ -230,17 +232,18 @@ def update_credit_card():
             methods = PaymentMethods.objects(card_name=card)
             if methods:
                 try:
+                    post = Posts(
+                        owner=owner,
+                        title='Payment methods changed',
+                        content=f'**{card}** to **{name}**',
+                        severity='nor', is_public=True
+                    )
                     methods.update(card_name=name)
+                    post.save()
                     res['msg'] = 'Card Name updated'
                     res['payment_methods'] = PaymentMethods.objects().order_by(
                         'card_name', 'installments'
                     )
-                    Posts(
-                        owner=owner,
-                        title='Payment methods changed',
-                        content=f"",
-                        severity='nor', is_public=True
-                    ).save()
                     NewestPosts(owner=owner).save()
                 except Exception as e:
                     res['err'] = str(e)
@@ -276,7 +279,7 @@ def delete_credit_card():
                     Posts(
                         owner=owner,
                         title='Payment methods changed',
-                        content=f"",
+                        content=f'{name} **Deleted**',
                         severity='nor', is_public=True
                     ).save()
                     NewestPosts(owner=owner).save()
@@ -356,7 +359,7 @@ def create_answer():
                         Posts(
                             owner=owner,
                             title='Answer Added',
-                            content=f"",
+                            content=f'{ans.label} **Added**',
                             severity='nor', is_public=True
                         ).save()
                         NewestPosts(owner=owner).save()
@@ -410,6 +413,10 @@ def update_answer():
                     ans = Answers.objects(
                         id=answer.get('id'), owner=owner
                     ).first()
+                if (al := answer.get('label')) == ans.label:
+                    cnt = f'{ans.label} **Changed**'
+                else:
+                    cnt = f'**{ans.label}** to **{al} Changed**'
                 ans.update(
                     label=answer.get('label', ans.label),
                     color=Color[answer.get('color', ans.color)],
@@ -420,7 +427,7 @@ def update_answer():
                     Posts(
                         owner=owner,
                         title='Answers Changed',
-                        content=f"",
+                        content=cnt,
                         severity='nor', is_public=True
                     ).save()
                     NewestPosts(owner=owner).save()
@@ -477,7 +484,7 @@ def delete_answer():
                     Posts(
                         owner=owner,
                         title='Answers Changed',
-                        content=f"",
+                        content=f'{ans.label} **Deleted**',
                         severity='nor', is_public=True
                     ).save()
                     NewestPosts(owner=owner).save()
@@ -571,10 +578,11 @@ def create_expression():
                 if identity.get('is_admin'):
                     exp.is_system = expression.get('is_system', False)
                     if exp.is_system:
+                        cnt = f'{exp.identifier} with tag: **{exp.pattern}**'
                         Posts(
                             owner=owner,
                             title='Expression Added',
-                            content=f"",
+                            content=cnt,
                             severity='nor', is_public=True
                         ).save()
                         NewestPosts(owner=owner).save()
@@ -635,7 +643,7 @@ def update_expression():
                     Posts(
                         owner=owner,
                         title='Expression Changed',
-                        content=f"",
+                        content=f'{exp.identifier} **Changed**',
                         severity='nor', is_public=True
                     ).save()
                     NewestPosts(owner=owner).save()
@@ -690,7 +698,7 @@ def delete_expression():
                     Posts(
                         owner=owner,
                         title='Expression Added',
-                        content=f"",
+                        content=f'{exp.identifier} **Deleted**',
                         severity='nor', is_public=True
                     ).save()
                     NewestPosts(owner=owner).save()

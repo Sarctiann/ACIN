@@ -24,7 +24,13 @@ const AnswerButtons = (props) => {
   }, [commonAnswers, ownAnswers])
 
   const handleClickAnswer = (text) => {
+    (async () => {
+      navigator.clipboard.writeText(
+        strFormat(text, [...sysRegex, ...ownRegex], answerList)
+      )
+    })()
     setText(text)
+    handleMessage('Formatted Text Copied to Clipboard', 'success')
   }
 
   const handleCopy = () => {
@@ -82,17 +88,21 @@ const AnswerButtons = (props) => {
             >
               {commonAnswers.map((ans) => {
                 return (
-                  <Button key={ans._id.$oid} fullWidth variant='contained'
-                    sx={{
-                      color: '#FFFFFF',
-                      background: ans.color, '&:hover': {
-                        background: ans.color, filter: 'brightness(90%)'
-                      }
-                    }}
-                    onClick={() => handleClickAnswer(ans.content)}
-                  >
-                    {ans.label}
-                  </Button>
+                  <Tooltip title='Select and Copy Formatted Text' followCursor
+                  enterDelay={1000} key={ans._id.$oid}
+                >
+                    <Button fullWidth variant='contained'
+                      sx={{
+                        color: '#FFFFFF',
+                        background: ans.color, '&:hover': {
+                          background: ans.color, filter: 'brightness(90%)'
+                        }
+                      }}
+                      onClick={() => handleClickAnswer(ans.content)}
+                    >
+                      {ans.label}
+                    </Button>
+                  </Tooltip>
                 )
               })}
             </Stack>
@@ -106,17 +116,21 @@ const AnswerButtons = (props) => {
             >
               {ownAnswers.map((ans) => {
                 return (
-                  <Button key={ans._id.$oid} fullWidth variant='contained'
-                    sx={{
-                      color: '#FFFFFF',
-                      background: ans.color, '&:hover': {
-                        background: ans.color, filter: 'brightness(90%)'
-                      }
-                    }}
-                    onClick={() => handleClickAnswer(ans.content)}
+                  <Tooltip title='Select and Copy Formatted Text' followCursor
+                    enterDelay={1000} key={ans._id.$oid}
                   >
-                    {ans.label}
-                  </Button>
+                    <Button fullWidth variant='contained'
+                      sx={{
+                        color: '#FFFFFF',
+                        background: ans.color, '&:hover': {
+                          background: ans.color, filter: 'brightness(90%)'
+                        }
+                      }}
+                      onClick={() => handleClickAnswer(ans.content)}
+                    >
+                      {ans.label}
+                    </Button>
+                  </Tooltip>
                 )
               })}
             </Stack>

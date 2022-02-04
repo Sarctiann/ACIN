@@ -145,6 +145,10 @@ const Posts = (props) => {
                     onClose: () => { setPostToDelete(element._id) }
                   }
                 }
+                const content = element.content
+                const owner = `**${element.owner.username}**`
+                const pub = element.is_public ? 'to **All**' : 'just for **Me**'
+                const date = new Date(element._id.$date).toLocaleDateString()
                 component = (
                   <Grid item key={element._id['$date']}>
                     <Alert variant='filled' {...post_props}
@@ -155,11 +159,13 @@ const Posts = (props) => {
                     >
                       <AlertTitle>
                         <Typography variant='h5'>
-                          {element.owner.username} - {element.title}
+                          {element.title}
                         </Typography>
                       </AlertTitle>
                       <ReactMarkdown className={style.mdStyle}
-                        children={element.content} remarkPlugins={[remarkGfm]}
+                        remarkPlugins={[remarkGfm]} children={
+                          `${content}\n\n*${owner} ${pub}* | *${date}*`
+                        }
                       />
                     </Alert>
                   </Grid>

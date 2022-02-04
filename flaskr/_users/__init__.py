@@ -265,7 +265,6 @@ def update_user_settings():
                 or
                 UserSettings(owner=user)
             )
-            print(user.username)
             if sett:
                 try:
                     for k, v in data.items():

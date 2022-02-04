@@ -25,3 +25,4 @@ class UserSettings(me.Document):
     theme_mode = me.EnumField(Mode, default=Mode.DARK)
     calculator = me.BooleanField(default=True)
     postsFontFamily = me.StringField(default='Helvetica')
+    notifVol = me.FloatField(min_value=0, max_value=1, default=0.1)

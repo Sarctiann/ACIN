@@ -42,7 +42,6 @@ const Basic = (props) => {
           }
         )
         if (res.data['result'] !== undefined) {
-          handleMessage(`$${res.data.result}`, 'success')
           setHistory([
             {
               _id: { $date: new Date().getTime() },
@@ -50,7 +49,9 @@ const Basic = (props) => {
               footnote: res.data.footnote
             },
             ...history
-          ])
+          ]);
+          (async () => {navigator.clipboard.writeText(`$${res.data.result}`)})()
+          handleMessage(`$${res.data.result} Copied`, 'success')
         }
         if (res.data['err']) {
           handleMessage(res.data.err, 'error')
