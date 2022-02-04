@@ -36,7 +36,9 @@ const AuthenticatedContent = (props) => {
           }
         )
         if (res.data['newest_post']) {
-          if (timeStamp !== null && res.data.posts.length > fetchedPosts) {
+          if (
+            timeStamp !== null && res.data.posts.length > fetchedPosts.length
+          ) {
             playBeep()
           }
           setTimeStamp(res.data['newest_post'])
@@ -71,7 +73,7 @@ const AuthenticatedContent = (props) => {
       source.cancel('Leaving News page or the data is already loaded')
     }
     // eslint-disable-next-line
-  }, [user])
+  }, [user, timeStamp, fetchedPosts.length])
 
   useEffect(() => {
     const source = axios.CancelToken.source()
