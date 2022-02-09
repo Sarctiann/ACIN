@@ -45,7 +45,7 @@ const UserOptions = (props) => {
 
   return (
     <Fragment {...props}>
-      <Grid item xs={12} mt={2}>
+      <Grid item xs={12}>
         <Paper elevation={3}>
           <Grid container spacing={2} margin={0} px={{ xs: 0, md: 3 }}>
             <Grid item xs={12}>

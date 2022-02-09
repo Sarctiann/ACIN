@@ -20,28 +20,14 @@ const Navbar = () => {
 
   const location = useLocation()
 
-  let currentTab
-  switch (`/${location.pathname.split('/')[1]}`) {
-    case routes[0]:
-      currentTab = routes[0]
-      break;
-    case routes[1]:
-      currentTab = routes[1]
-      break;
-    case routes[2]:
-      currentTab = routes[2]
-      break;
-    case routes[3]:
-      currentTab = routes[3]
-      break;
-    default:
-      currentTab = false
-      break;
-  }
-
-  const [tabValue, setTabValue] = useState(currentTab)
+  const [tabValue, setTabValue] = useState(false)
   const [count, setCount] = useState(0)
-
+  
+  useMemo(() => {
+    const path = `/${location.pathname.split('/')[1]}`
+    setTabValue(routes.includes(path) ? path : false)
+  }, [location])
+  
   const handleChange = (_, newValue) => {
     switch (newValue) {
       case routes[0]:

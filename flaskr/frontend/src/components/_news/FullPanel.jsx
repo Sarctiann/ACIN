@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import {
-  Typography, Grid, Box, Divider, TextField, Button, useMediaQuery, Paper
+  Typography, Grid, Box, Divider, TextField, Button, Paper
 } from '@mui/material';
 import { Send } from '@mui/icons-material'
 import PostSelect from './PostSelect'
@@ -9,7 +9,7 @@ import axios from 'axios';
 import { UserContext } from '../tools/contexts'
 import { api_url } from '../tools/routes'
 
-const Panel = (props) => {
+const FullPanel = (props) => {
 
   const {
     filter: { severity, setSeverity, owner, setOwner },
@@ -100,11 +100,6 @@ const Panel = (props) => {
     })()
   }
 
-  const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'))
-  const ROWS = {
-    rows: isSmall ? 8 : 12
-  }
-
   let send_props
   switch (newSeverity) {
     case 'Reminder':
@@ -150,7 +145,7 @@ const Panel = (props) => {
               </Divider>
             </Grid>
             <Grid item xs={12}>
-              <TextField fullWidth size='small' label='Title'
+              <TextField fullWidth size='small' label='TITLE'
                 name='title'
                 value={newPost.title}
                 onChange={handleChange}
@@ -158,7 +153,8 @@ const Panel = (props) => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                fullWidth {...ROWS} multiline size='small' label='Content'
+                fullWidth rows={12} multiline size='small' 
+                label='CONTENT (Markdown Supported)'
                 name='content'
                 value={newPost.content}
                 onChange={handleChange}
@@ -203,4 +199,4 @@ const Panel = (props) => {
   )
 }
 
-export default Panel
+export default FullPanel

@@ -27,6 +27,9 @@ const UserAccount = () => {
   const [otherUserData, setOtherUserData] = useState(initialOtherUser)
   const [usersSate, setUsersState] = useState({ msg: '', vnt: 'success' })
 
+  const displayAdmin = user.is_admin ? 'block' : 'none'
+  const displayNoAdmin = user.is_admin ? 'none' : 'block'
+
   return (
     <Container maxWidth='xl'>
       <Grid item xs={12}>
@@ -34,12 +37,23 @@ const UserAccount = () => {
       </Grid>
       <Grid container spacing={2}>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={4} sx={{ display: displayAdmin }}>
           <UpdateUserForm
             user={user}
             setUser={setUser}
           />
+          <Grid item mt={2}> </Grid>
+          <UserOptions />
+        </Grid>
 
+        <Grid item xs={12} md={4} sx={{ display: displayNoAdmin }}>
+          <UpdateUserForm
+            user={user}
+            setUser={setUser}
+          />
+        </Grid>
+
+        <Grid item xs={12} md={4} sx={{ display: displayNoAdmin }} >
           <UserOptions />
         </Grid>
 
