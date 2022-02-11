@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo } from 'react'
+import { useContext, useState, useMemo, useRef } from 'react'
 import {
   Grid, Box, Alert, AlertTitle, Divider, Chip, Stack, Typography, Button,
   Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText
@@ -8,8 +8,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import axios from 'axios'
 
-import { 
-  PostContext, UserContext, UserSettingsContext 
+import {
+  PostContext, UserContext, UserSettingsContext
 } from '../tools/contexts'
 import { api_url } from '../tools/routes'
 import daysAgo from '../tools/daysAgo'
@@ -17,13 +17,76 @@ import daysAgo from '../tools/daysAgo'
 import style from './markdownStyle.module.css'
 
 
+const PostPreview = (props) => {
+
+  const { newPost, newSeverity, to, userSettings } = props
+
+  let post_props
+  switch (newSeverity) {
+    case 'Reminder':
+      post_props = {
+        icon: <Alarm />, severity: 'success'
+      }
+      break
+    case 'Normal':
+      post_props = { severity: 'warning' }
+      break
+    case 'Urgent':
+      post_props = { severity: 'error' }
+      break
+    default:
+      post_props = {}
+      break
+  }
+
+  const date = () => {
+    return new Date(
+      new Date().setDate(
+        new Date().getDate() + (parseInt(newPost.days_offset) || 0)
+      )
+    ).toLocaleDateString()
+  }
+
+  return (
+    < Grid item>
+      <Alert variant='outlined' {...post_props}
+        style={{
+          fontFamily: `${userSettings.postsFontFamily}, Helvetica`
+          , fontSize: '1em'
+        }}
+      >
+        <AlertTitle>
+          <Typography variant='h5'>
+            {newPost.title} (Preview)
+          </Typography>
+        </AlertTitle>
+        <ReactMarkdown className={style.mdStyle}
+          remarkPlugins={[remarkGfm]} children={
+            `${newPost.content}\n\n*Own ${to}* | *${date()}*`
+          }
+        />
+      </Alert>
+    </Grid >
+  )
+}
+
 const Posts = (props) => {
 
-  const { filter: { severity, owner }, handleMessage } = props
+
+  const {
+    filter: { severity, owner },
+    newPost, setNewPost, newSeverity, to, contentRef, handleMessage
+  } = props
+  const stackRef = useRef(null)
   const { fetchedPosts } = useContext(PostContext)
   const { user } = useContext(UserContext)
   const { userSettings } = useContext(UserSettingsContext)
   const [postToDelete, setPostToDelete] = useState('')
+
+  const goUp = () => {
+    stackRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+    contentRef.current.focus()
+  }
 
   const posts = useMemo(() => {
     if (fetchedPosts.length > 0) {
@@ -107,9 +170,17 @@ const Posts = (props) => {
         <Box border={2} p={2} borderRadius={1} borderColor='primary.main'
           sx={{ height: '80vh' }}
         >
-          <Stack spacing={1} pr={1}
+          <Stack spacing={1} pr={1} ref={stackRef}
             sx={{ paddingBlockEnd: 2, height: '75vh', overflow: 'auto' }}
           >
+            {(newPost.title || newPost.content) &&
+              <PostPreview
+                newPost={newPost}
+                newSeverity={newSeverity}
+                to={to}
+                userSettings={userSettings}
+              />
+            }
             {posts?.map(element => {
               let component
               if (element.divider) {
@@ -139,10 +210,19 @@ const Posts = (props) => {
                     post_props = {}
                     break
                 }
+                let canEdit = {}
                 if (user?.is_admin || element.owner._id === user?.email) {
                   post_props = {
                     ...post_props,
                     onClose: () => { setPostToDelete(element._id) }
+                  }
+                  canEdit = {
+                    onDoubleClick: () => {
+                      setNewPost({
+                        title: '', content: element.content, days_offset: ''
+                      })
+                      goUp()
+                    }
                   }
                 }
                 const content = element.content
@@ -154,7 +234,7 @@ const Posts = (props) => {
                     <Alert variant='filled' {...post_props}
                       style={{
                         fontFamily: `${userSettings.postsFontFamily}, Helvetica`
-                        , fontSize:'1em'
+                        , fontSize: '1em'
                       }}
                     >
                       <AlertTitle>
@@ -162,11 +242,13 @@ const Posts = (props) => {
                           {element.title}
                         </Typography>
                       </AlertTitle>
-                      <ReactMarkdown className={style.mdStyle}
-                        remarkPlugins={[remarkGfm]} children={
-                          `${content}\n\n*${owner} ${pub}* | *${date}*`
-                        }
-                      />
+                      <div {...canEdit}>
+                        <ReactMarkdown className={style.mdStyle}
+                          remarkPlugins={[remarkGfm]} children={
+                            `${content}\n\n*${owner} ${pub}* | *${date}*`
+                          }
+                        />
+                      </div>
                     </Alert>
                   </Grid>
                 )
