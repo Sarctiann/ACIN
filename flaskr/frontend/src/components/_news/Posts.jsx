@@ -75,7 +75,7 @@ const Posts = (props) => {
 
   const {
     filter: { severity, owner },
-    newPost, setNewPost, newSeverity, to, contentRef, handleMessage
+    newPost, setNewPost, newSeverity, to, contentFocus, handleMessage
   } = props
   const stackRef = useRef(null)
   const { fetchedPosts } = useContext(PostContext)
@@ -85,7 +85,7 @@ const Posts = (props) => {
 
   const goUp = () => {
     stackRef.current.scrollTo({ top: 0, behavior: 'smooth' })
-    contentRef.current.focus()
+    contentFocus()
   }
 
   const posts = useMemo(() => {
@@ -217,7 +217,7 @@ const Posts = (props) => {
                     onClose: () => { setPostToDelete(element._id) }
                   }
                   canEdit = {
-                    onDoubleClick: () => {
+                    onClick: () => {
                       setNewPost({
                         title: '', content: element.content, days_offset: ''
                       })

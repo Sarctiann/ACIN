@@ -33,7 +33,7 @@ const CreatePost = (props) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField inputRef={contentRef}
+              <TextField
                 fullWidth rows={8} multiline size='small'
                 label='CONTENT (Markdown Supported)'
                 name='content'

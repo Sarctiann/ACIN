@@ -66,9 +66,11 @@ def create_post():
         if user:
             try:
                 time = dt.now()
+                print(time)
                 if offset:= data.get('days_offset'):
-                    time + td(days=int(offset))
-                    time.replace(hour=10, minute=30, second=0)
+                    time += td(days=int(offset))
+                    time = time.replace(hour=10, minute=30, second=0)
+                print(time)
                 Posts(
                     owner=user,
                     title=data.get('title', 'Untitled'),

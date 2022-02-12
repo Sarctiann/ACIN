@@ -15,12 +15,15 @@ const News = () => {
   const [owner, setOwner] = useState('from All')
   const [message, setMessage] = useState({ msg: '', vnt: '' })
   const [open, setOpen] = useState(false)
-
   const [newPost, setNewPost] = useState({
     title: '', content: '', days_offset: ''
   })
   const [newSeverity, setNewSeverity] = useState('Normal')
   const [to, setTo] = useState('to Me')
+
+  const contentFocus = () => {
+    contentRef.current.focus()
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -147,7 +150,7 @@ const News = () => {
           setNewPost={setNewPost}
           newSeverity={newSeverity}
           to={to}
-          contentRef={contentRef}
+          contentFocus={contentFocus}
           handleMessage={handleMessage}
         />
       </Grid>
@@ -165,12 +168,11 @@ const News = () => {
           setNewPost={setNewPost}
           newSeverity={newSeverity}
           to={to}
-          contentRef={contentRef}
+          contentFocus={contentFocus}
           handleMessage={handleMessage}
         />
         <CreatePost
           {...creation}
-          contentRef={contentRef}
         />
       </Grid>
 
