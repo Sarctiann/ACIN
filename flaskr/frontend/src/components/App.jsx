@@ -34,6 +34,9 @@ const App = () => {
           primary: cyan,
           secondary: deepOrange,
           info: deepPurple
+        },
+        typography: {
+          fontSize: 12
         }
       })
       :
@@ -47,6 +50,9 @@ const App = () => {
             paper: '#eaeaea',
             default: '#fafafa'
           }
+        },
+        typography: {
+          fontSize: 12
         }
       })
     , [userSettings.theme_mode]

@@ -7,7 +7,7 @@ import PostSelect from './PostSelect'
 const CreatePost = (props) => {
 
   const { 
-    newPost, newSeverity, setNewSeverity, to, setTo, contentRef,
+    newPost, newSeverity, setNewSeverity, to, setTo,
     handleChange, handleSend, send_props 
   } = props
 

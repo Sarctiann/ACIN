@@ -22,12 +22,12 @@ const Navbar = () => {
 
   const [tabValue, setTabValue] = useState(false)
   const [count, setCount] = useState(0)
-  
+
   useMemo(() => {
     const path = `/${location.pathname.split('/')[1]}`
     setTabValue(routes.includes(path) ? path : false)
   }, [location])
-  
+
   const handleChange = (_, newValue) => {
     switch (newValue) {
       case routes[0]:
@@ -63,16 +63,18 @@ const Navbar = () => {
   return (
     <>
       <AppBar position='sticky' color='default'>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Toolbar variant='dense' sx={{ justifyContent: 'space-between' }}>
 
           <NavMenu setTabValue={setTabValue} disabled={disabled}
             user={user}
           />
 
-          <Tabs sx={{ visibility: { xs: 'hidden', sm: 'visible' } }}
+          <Tabs 
+            sx={{visibility: { xs: 'hidden', sm: 'visible' } }}
             indicatorColor='primary'
             onChange={handleChange}
-            value={tabValue}>
+            value={tabValue}
+          >
 
             <Tab value={routes[0]} label='News'
               icon={
