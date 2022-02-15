@@ -13,3 +13,5 @@ MONGODB_SETTINGS = {
     )
 }
 JWT_EXPIRES = dt.timedelta(hours=24)
+
+POST_VALIDITY = 90

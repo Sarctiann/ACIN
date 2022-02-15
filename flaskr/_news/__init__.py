@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request
 from mongoengine.queryset.visitor import Q
 
 from flaskr.extensions import jwt
+from flaskr.settings import POST_VALIDITY
 from .models import Posts, Severity, NewestPosts
 from flaskr._users import Users
 
@@ -17,7 +18,7 @@ def fetch_posts():
     identity = jwt.get_jwt()['sub']['email']
     user = Users.objects(email=identity).first()
     now = dt.now()
-    valid = now - td(days=30)
+    valid = now - td(days=POST_VALIDITY)
     # Get newest post from database and format it removing microseconds
     newest_post = NewestPosts.objects().order_by(
         '-time_stamp'
@@ -66,11 +67,9 @@ def create_post():
         if user:
             try:
                 time = dt.now()
-                print(time)
+                time = time.replace(hour=00, minute=00, second=0)
                 if offset:= data.get('days_offset'):
                     time += td(days=int(offset))
-                    time = time.replace(hour=10, minute=30, second=0)
-                print(time)
                 Posts(
                     owner=user,
                     title=data.get('title', 'Untitled'),
@@ -119,7 +118,7 @@ def delete_post():
 def purge_old_posts():
 
     identity = jwt.get_jwt()
-    valid = dt.now() - td(days=30)
+    valid = dt.now() - td(days=POST_VALIDITY)
     res = {}
 
     if identity:
@@ -127,7 +126,7 @@ def purge_old_posts():
         if posts:
             count = posts.count()
             posts.delete()
-            res['msg'] = f'{count} Posts deleted'
+            res['msg'] = f'{count} Old Posts deleted'
         else:
             res['wrn'] = 'No old posts'
     else:
