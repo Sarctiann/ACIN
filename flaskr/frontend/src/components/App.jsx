@@ -36,7 +36,7 @@ const App = () => {
           info: deepPurple
         },
         typography: {
-          fontSize: 12
+          fontSize: 13
         }
       })
       :
@@ -52,7 +52,7 @@ const App = () => {
           }
         },
         typography: {
-          fontSize: 12
+          fontSize: 13
         }
       })
     , [userSettings.theme_mode]
