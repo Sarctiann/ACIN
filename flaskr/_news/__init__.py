@@ -75,7 +75,6 @@ def create_post():
                     time = time.replace(
                         hour=10, minute=00, second=0
                     ) + localOffset
-
                 Posts(
                     owner=user,
                     title=data.get('title', 'Untitled'),
