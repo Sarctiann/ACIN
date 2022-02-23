@@ -68,7 +68,11 @@ def create_post():
             try:
                 time = dt.now()
                 if offset:= data.get('days_offset'):
-                    time = time.replace(hour=12, minute=30, second=0)
+                    time = time.replace(
+                            hour=10, minute=00, second=0
+                        ) + td(
+                            hours=data.get('localeTimeOffset', 0)
+                        )
                     time += td(days=int(offset))
                 Posts(
                     owner=user,

@@ -118,7 +118,13 @@ const Posts = (props) => {
 
       if (filteredPosts.length > 0) {
         filteredPosts.forEach(post => {
-          const other_day = daysAgo(today, post._id['$date'])
+          const date = new Date(post._id.$date)
+          const other_day = daysAgo(
+            today,
+            new Date(
+              date.setHours(date.getHours() + date.getTimezoneOffset()/60)
+            )
+          )
           if (last_day !== other_day) {
             dividedPosts.push({ divider: other_day })
             last_day = other_day

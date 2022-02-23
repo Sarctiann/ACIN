@@ -90,7 +90,8 @@ const News = () => {
       content: newPost.content,
       severity: getSeverity(),
       days_offset: days_offset,
-      is_public: getPublic()
+      is_public: getPublic(),
+      localeTimeOffset: new Date().getTimezoneOffset() / 60
     })
   }
 

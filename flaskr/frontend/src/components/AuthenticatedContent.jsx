@@ -107,6 +107,32 @@ const AuthenticatedContent = (props) => {
     }
   }, [user, setUser])
 
+  useEffect(() => {
+
+    let timer = null
+
+    const refresh = () => {
+      const nd = new Date()
+      let diff = new Date(
+        nd.getFullYear(), nd.getMonth(), nd.getDate(), 10, 30
+      ) - new Date()
+      if (diff < 0) {
+        diff = new Date(
+          nd.getFullYear(), nd.getMonth(), nd.getDate() + 1, 10, 30
+        ) - new Date()
+      }
+      setTimeStamp(null)
+      console.log('what do we have for today?')
+
+      timer = setTimeout(refresh, diff)
+    }
+    refresh()
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [])
+
   return children
 }
 

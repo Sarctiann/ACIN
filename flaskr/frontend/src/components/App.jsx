@@ -26,35 +26,27 @@ const App = () => {
   const { auth, setAuth } = useContext(AuthContext)
   const { userSettings } = useContext(UserSettingsContext)
 
-  const theme = useMemo(() =>
-    userSettings.theme_mode !== 'light' ?
-      createTheme({
-        palette: {
-          mode: 'dark',
-          primary: cyan,
-          secondary: deepOrange,
-          info: deepPurple
-        },
-        typography: {
-          fontSize: 13
-        }
-      })
-      :
-      createTheme({
-        palette: {
-          mode: userSettings.theme_mode,
-          primary: cyan,
-          secondary: deepOrange,
-          info: deepPurple,
-          background: {
-            paper: '#eaeaea',
-            default: '#fafafa'
-          }
-        },
-        typography: {
-          fontSize: 13
-        }
-      })
+  const theme = useMemo(() => {
+
+    const paperLightBG = userSettings.theme_mode === 'light' ? {
+      background: {
+        ...window.lightBG
+      }
+    } : {}
+
+    return createTheme({
+      palette: {
+        mode: userSettings.theme_mode,
+        primary: cyan,
+        secondary: deepOrange,
+        info: deepPurple,
+        ...paperLightBG
+      },
+      typography: {
+        fontSize: window.globalFontSize
+      }
+    })
+  }
     , [userSettings.theme_mode]
   )
 
@@ -63,7 +55,6 @@ const App = () => {
       setAuth(true)
     }
   }, [user, setAuth])
-
 
   return (
     <ThemeProvider theme={theme}>
