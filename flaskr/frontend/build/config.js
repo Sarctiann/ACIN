@@ -1,1 +1,5 @@
-var my_var = "hola mundo"
+var globalFontSize = 13
+var lightBG = {
+    paper: '#eaeaea',
+    default: '#fafafa'
+}
