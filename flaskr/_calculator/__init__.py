@@ -238,7 +238,7 @@ def get_history():
 
     if identity:
         try:
-            History.objects(owner=user)[20:].delete()
+            History.objects(owner=user).order_by('-created_at')[20:].delete()
             history = History.objects(owner=user).order_by('-created_at')
             if history:
                 res['hist'] = history

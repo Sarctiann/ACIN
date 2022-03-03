@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useRef } from 'react'
 import {
   Grid, Paper, Box, Typography, TextField, InputAdornment, Button, Radio,
   FormControl, RadioGroup, FormControlLabel, Divider
@@ -17,6 +17,9 @@ const Complete = (props) => {
   const [sign, setSign] = useState('pri')
   const [operation, setOperation] = useState('add')
   const [expression, setExpression] = useState('')
+  const firstRef = useRef(null)
+  const secondRef = useRef(null)
+  const expRef = useRef(null)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -27,12 +30,14 @@ const Complete = (props) => {
     const { value } = e.target
     setSign(value)
     setFields({ ...fields, first: '', third: '' })
+    firstRef.current.focus()
   }
 
   const handleOperation = (e) => {
     const { value } = e.target
     setOperation(value)
     setFields({ ...fields, second: '' })
+    secondRef.current.focus()
   }
 
   const handleExpressionChange = (e) => {
@@ -94,16 +99,19 @@ const Complete = (props) => {
   const handleGetFirst = () => {
     let dataset = { second: fields.second, third: fields.third }
     handleQuery('/calculator/get-first-term', dataset, 'first')
+    expRef.current.focus()
   }
-
+  
   const handleGetSecond = () => {
     let dataset = { first: fields.first, third: fields.third }
     handleQuery('/calculator/get-second-term', dataset, 'second')
+    expRef.current.focus()
   }
-
+  
   const handleGetThird = () => {
     let dataset = { first: fields.first, second: fields.second }
     handleQuery('/calculator/get-result', dataset, 'third')
+    expRef.current.focus()
   }
 
   const handleEvaluate = () => {
@@ -139,7 +147,11 @@ const Complete = (props) => {
   return (
     <Grid item xs={12} md={7}>
       <Paper elevation={5} sx={{ borderRadius: 3 }}>
-        <Box sx={{ paddingBlockEnd: 2, minHeight: '65vh' }} p={2}>
+        <Box sx={{ paddingBlockEnd: 2, minHeight: '65vh' }} p={2}
+          onKeyPress={e => {
+            if (e.key === 'q') {expRef.current.focus()}
+          }}
+        >
           <Grid container spacing={3} align='center' pr={2}
             sx={{ minHeight: '60vh', overflow: 'auto' }}
           >
@@ -203,7 +215,7 @@ const Complete = (props) => {
               </Typography>
             </Grid>
             <Grid item xs={12} md={4}>
-              <TextField fullWidth size='small' type='number'
+              <TextField fullWidth size='small' type='number' autoFocus
                 label={sign === 'pri' ? 'Price' : 'Percentage'}
                 InputProps={{
                   inputProps: { min: '0', step: '10' },
@@ -220,7 +232,7 @@ const Complete = (props) => {
                     </Typography>
                   </InputAdornment>
                 }}
-
+                inputRef={firstRef}
                 name='first'
                 value={fields.first}
                 onChange={handleChange}
@@ -245,6 +257,7 @@ const Complete = (props) => {
                     </Typography>
                   </InputAdornment>
                 }}
+                inputRef={secondRef}
                 name='second'
                 value={fields.second}
                 onChange={handleChange}
@@ -314,6 +327,7 @@ const Complete = (props) => {
             </Grid>
             <Grid item xs={12}>
               <TextField fullWidth label='Evaluate Expression' size='small'
+                inputRef={expRef}
                 name='expression' InputProps={{
                   style: { fontFamily: 'monospace', fontSize: 20 },
                   startAdornment: <InputAdornment position='start'>

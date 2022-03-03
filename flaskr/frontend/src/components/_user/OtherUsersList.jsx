@@ -12,9 +12,9 @@ import RDialog from '../tools/ReusableDialog'
 
 const OtherUsersList = (props) => {
 
-  const { 
+  const {
     user, setEdit, usersSate, setUsersState,
-    initialOtherUser, setOtherUserData, ...others 
+    initialOtherUser, setOtherUserData, ...others
   } = props
   const [usersData, setUsersData] = useState([])
 
@@ -62,26 +62,26 @@ const OtherUsersList = (props) => {
             },
             data: { email: email }
           }
-          )
-          if (res.data['msg']) {
-            setUsersState({ msg: res.data['msg'], vnt: 'info' })
-            setTimeout(() => {
-              setUsersState({ msg: '', vnt: 'info' })
-            }, 2500)
-          } else {
-            setUsersState({ msg: res.data['err'], vnt: 'error' })
-            setTimeout(() => {
-              setUsersState({ msg: '', vnt: 'error' })
-            }, 2500)
-          }
+        )
+        if (res.data['msg']) {
+          setUsersState({ msg: res.data['msg'], vnt: 'info' })
+          setTimeout(() => {
+            setUsersState({ msg: '', vnt: 'info' })
+          }, 2500)
+        } else {
+          setUsersState({ msg: res.data['err'], vnt: 'error' })
+          setTimeout(() => {
+            setUsersState({ msg: '', vnt: 'error' })
+          }, 2500)
         }
-        catch (error) {
-          console.log(error)
-        }
-      })()
-      setEdit(false)
-      setOtherUserData(initialOtherUser)
-    }
+      }
+      catch (error) {
+        console.log(error)
+      }
+    })()
+    setEdit(false)
+    setOtherUserData(initialOtherUser)
+  }
 
   return (
     <Fragment {...others}>
@@ -93,11 +93,11 @@ const OtherUsersList = (props) => {
                 List of Active Users
               </Typography>
             </Grid>
-            {usersData.map((otherUser) => {
+            {usersData.length > 0 ? usersData.map((otherUser) => {
               return (
                 <ListItem key={otherUser['username']} secondaryAction={
                   <RDialog title='Delete' message='Confirm user Delete?'
-                    confirmText='DELETE' action={() => 
+                    confirmText='DELETE' action={() =>
                       handleDeleteUser(otherUser['email'])
                     }
                   >
@@ -118,16 +118,22 @@ const OtherUsersList = (props) => {
                   </ListItemButton>
                 </ListItem>
               )
-            })}
+            }) :
+              <Grid item xs={12}>
+                <Typography variant='h4' color='secondary'>
+                  Loading...
+                </Typography>
+              </Grid>
+            }
           </Grid>
         </Paper>
-          <Grid item pt={3}>
-            <Fade in={Boolean(usersSate['msg'])} timeout={1000}>
-              <Alert severity={usersSate['vnt']} variant='outlined'>
-                {usersSate['msg']}
-              </Alert>
-            </Fade>
-          </Grid>
+        <Grid item pt={3}>
+          <Fade in={Boolean(usersSate['msg'])} timeout={1000}>
+            <Alert severity={usersSate['vnt']} variant='outlined'>
+              {usersSate['msg']}
+            </Alert>
+          </Fade>
+        </Grid>
       </Grid>
     </Fragment>
   )

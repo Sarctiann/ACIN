@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import {
   Container, Grid, Snackbar, Alert
 } from '@mui/material'
@@ -16,6 +16,9 @@ const Answers = () => {
   const [ownAnswers, setOwnAnswers] = useState([])
   const [sysRegex, setSysRegex] = useState([])
   const [ownRegex, setOwnRegex] = useState([])
+  const priceRef = useRef(null)
+  const commonStackRef = useRef(null)
+  const ownStackRef = useRef(null)
 
   useAxiosEffect(
     '/answers/get-all', 'answers',
@@ -51,13 +54,24 @@ const Answers = () => {
 
 
   return (
-    <Container maxWidth='xl'>
+    <Container maxWidth='xl' 
+      onKeyPress={e => {
+        if (e.key === 'q') { priceRef.current.focus()}
+        if (e.key === 'w' && commonAnswers.length > 0) {
+          commonStackRef.current.focus()
+        }
+        if (e.key === 'e' && ownAnswers.length > 0) {
+          ownStackRef.current.focus()
+        }
+      }}
+    >
       <Grid container spacing={1} margin={0} pt={3}>
         <Grid item xs={12} md={6}>
           <CreditCards
             payMeths={payMeths}
             sysRegex={sysRegex}
             handleMessage={handleMessage}
+            priceRef={priceRef}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -67,6 +81,8 @@ const Answers = () => {
             sysRegex={sysRegex}
             ownRegex={ownRegex}
             handleMessage={handleMessage}
+            commonStackRef={commonStackRef}
+            ownStackRef={ownStackRef}
           />
         </Grid>
       </Grid>

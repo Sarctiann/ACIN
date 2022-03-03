@@ -192,7 +192,7 @@ const EditAnswers = (props) => {
                 <Stack spacing={1} p={1}
                   sx={{ paddingBlockEnd: 2, height: '40vh', overflow: 'auto' }}
                 >
-                  {commonAnswers.map((ans) => {
+                  {commonAnswers.length > 0 ? commonAnswers.map((ans) => {
                     return (
                       <Button key={ans._id.$oid} fullWidth variant='contained'
                         sx={{
@@ -206,7 +206,11 @@ const EditAnswers = (props) => {
                         {ans.label}
                       </Button>
                     )
-                  })}
+                  }) :
+                    <Typography variant='h5' color='primary'>
+                      Loading...
+                    </Typography>
+                  }
                 </Stack>
               </Grid>
             }
@@ -217,7 +221,7 @@ const EditAnswers = (props) => {
               <Stack spacing={1} p={1}
                 sx={{ paddingBlockEnd: 2, height: '40vh', overflow: 'auto' }}
               >
-                {ownAnswers.map((ans) => {
+                {ownAnswers.length > 0 ? ownAnswers.map((ans) => {
                   return (
                     <Button key={ans._id.$oid} fullWidth variant='contained'
                       sx={{
@@ -231,7 +235,11 @@ const EditAnswers = (props) => {
                       {ans.label}
                     </Button>
                   )
-                })}
+                }) :
+                <Typography variant='h5' color='primary'>
+                  Loading...
+                </Typography>
+              }
               </Stack>
             </Grid>
           </Grid>
