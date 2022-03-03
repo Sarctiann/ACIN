@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import {
   Grid, Box, TextField, IconButton, Stack, Button, Typography, Paper, Switch,
-  FormControlLabel, Snackbar, Alert
+  FormControlLabel, Snackbar, Alert, CircularProgress
 } from '@mui/material'
 import { Save, Delete, Cancel } from '@mui/icons-material'
 
@@ -193,9 +193,9 @@ const ExpressionsSettings = () => {
                         </Button>
                       )
                     }) :
-                    <Typography variant='h4' color='error'>
-                      Loading...
-                    </Typography>
+                      <Typography variant='h4' color='error'>
+                        L<CircularProgress size={17} />ading ...
+                      </Typography>
                     }
                   </Stack>
                 </Grid>
@@ -217,9 +217,9 @@ const ExpressionsSettings = () => {
                       </Button>
                     )
                   }) :
-                  <Typography variant='h4' color='primary'>
-                    Loading...
-                  </Typography>
+                    <Typography variant='h4' color='primary'>
+                      L<CircularProgress size={17} />ading ...
+                    </Typography>
                   }
                 </Stack>
               </Grid>

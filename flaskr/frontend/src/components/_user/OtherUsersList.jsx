@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import {
   Grid, Typography, Paper, ListItem, ListItemButton, IconButton, ListItemText,
-  Fade, Alert
+  Fade, Alert, CircularProgress
 } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import axios from 'axios'
@@ -121,7 +121,7 @@ const OtherUsersList = (props) => {
             }) :
               <Grid item xs={12}>
                 <Typography variant='h4' color='secondary'>
-                  Loading...
+                  L<CircularProgress size={17} color='secondary' />ading ...
                 </Typography>
               </Grid>
             }

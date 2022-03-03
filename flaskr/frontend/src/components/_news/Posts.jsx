@@ -1,7 +1,8 @@
 import { useContext, useState, useMemo, useRef } from 'react'
 import {
   Grid, Box, Alert, AlertTitle, Divider, Chip, Stack, Typography, Button,
-  Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText
+  Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText,
+  CircularProgress
 } from '@mui/material';
 import { Alarm } from '@mui/icons-material'
 import ReactMarkdown from 'react-markdown'
@@ -262,7 +263,7 @@ const Posts = (props) => {
               return component
             }) :
               <Typography variant='h4' color='secondary'>
-                Loading...
+                L<CircularProgress size={17} color='secondary' />ading ...
               </Typography>
             }
           </Stack>
