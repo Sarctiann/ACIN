@@ -134,7 +134,7 @@ const News = () => {
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth='xl'>
 
       <Grid
         container spacing={1} margin={0} pt={3}

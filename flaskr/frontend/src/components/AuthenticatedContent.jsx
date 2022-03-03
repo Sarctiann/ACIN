@@ -121,7 +121,7 @@ const AuthenticatedContent = (props) => {
           nd.getFullYear(), nd.getMonth(), nd.getDate() + 1, 10, 30
         ) - new Date()
       }
-      setTimeStamp(null)
+      setTimeStamp('')
       console.log('what do we have for today?')
 
       timer = setTimeout(refresh, diff)

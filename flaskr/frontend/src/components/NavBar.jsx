@@ -47,7 +47,9 @@ const Navbar = () => {
       setCount(length)
     }
 
-    return length - count
+    const result = count === 0 ? '!' : length - count
+
+    return result
   }, [fetchedPosts.length, count, tabValue])
 
   const items = [

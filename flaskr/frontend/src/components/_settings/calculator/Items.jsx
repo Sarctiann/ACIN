@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import {
   Grid, Paper, Box, Table, TableHead, TableBody, TableRow, TableCell,
-  IconButton, TextField, Button
+  IconButton, TextField, Button, Typography
 } from '@mui/material'
 import {
   Done, Cancel, Edit, Delete
@@ -119,7 +119,7 @@ const Items = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
+              {dates?.length > 0 ?
                 dates?.map(date => {
                   const dis = (
                     selected._id === oneDate._id &&
@@ -206,6 +206,14 @@ const Items = (props) => {
                   )
                   return component
                 })
+                :
+                <TableRow>
+                  <TableCell colSpan={4} align='center'>
+                    <Typography variant='h4' color='primary'>
+                      Loading...
+                    </Typography>
+                  </TableCell>
+                </TableRow>
               }
             </TableBody>
           </Table>

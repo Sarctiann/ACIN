@@ -697,7 +697,7 @@ def delete_expression():
                 if exp.is_system:
                     Posts(
                         owner=owner,
-                        title='Expression Added',
+                        title='Expression Deleted',
                         content=f'{exp.identifier} **Deleted**',
                         severity='nor', is_public=True
                     ).save()

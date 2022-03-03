@@ -193,7 +193,7 @@ const Lists = (props) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {lists.map(list => {
+                    {lists.length > 0 ? lists.map(list => {
                       const is_sel = selectedList === list.list_name
                       return (
                         <TableRow key={list._id.$oid} hover
@@ -232,7 +232,15 @@ const Lists = (props) => {
                           </TableCell>
                         </TableRow>
                       )
-                    })}
+                    }) :
+                      <TableRow>
+                        <TableCell colSpan={3} align='center'>
+                          <Typography variant='h4' color='primary'>
+                            Loading...
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    }
                   </TableBody>
                 </Table>
               </Grid>

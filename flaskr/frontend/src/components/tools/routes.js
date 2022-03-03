@@ -15,7 +15,7 @@ export const sub_routes = [
 
 const host = {
   development: 'http://localhost:5000/',
-  production: 'https://audiocenter-in.herokuapp.com/'
+  production: window.hostname
 }[process.env.NODE_ENV]
 
 const api_root = '/api-v1'
