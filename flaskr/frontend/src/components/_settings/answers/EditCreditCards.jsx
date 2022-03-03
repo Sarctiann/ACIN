@@ -236,7 +236,7 @@ const EditCreditCards = (props) => {
                         </CustomCell>
                       </TableRow>
 
-                      {paymentMethods.map(item => {
+                      {paymentMethods.length > 0 ? paymentMethods.map(item => {
 
                         let component
                         if (selected.id === item.id) {
@@ -255,7 +255,7 @@ const EditCreditCards = (props) => {
                                   onChange={handleChangeMethod}
                                 />
                               </CustomCell>
-                              <CustomCell 
+                              <CustomCell
                                 sx={{ backgroundColor: 'warning.main' }}
                               >
                                 <RDialog title='Update' confirmText='Update'
@@ -453,7 +453,15 @@ const EditCreditCards = (props) => {
 
                         }
                         return component
-                      })}
+                      }) :
+                        <TableRow>
+                          <TableCell colSpan={7} align='center'>
+                            <Typography variant='h4' color='primary'>
+                              Loading...
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      }
                     </TableBody>
                   </Table>
                 </TableContainer>

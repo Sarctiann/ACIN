@@ -23,7 +23,7 @@ const CustomCell = (props) => {
 
 const CreditCards = (props) => {
 
-  const { payMeths, sysRegex, handleMessage } = props
+  const { payMeths, sysRegex, handleMessage, priceRef } = props
 
   const [price, setPrice] = useState('')
 
@@ -86,7 +86,7 @@ const CreditCards = (props) => {
             </Typography>
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField label='Price' size='small'
+            <TextField label='Price' size='small' autoFocus
               inputProps={{
                 min: 0, step: 10
               }}
@@ -97,6 +97,7 @@ const CreditCards = (props) => {
                   </Typography>
                 </InputAdornment>
               }}
+              inputRef={priceRef}
               type='number'
               value={price}
               onChange={handleChangePrice}
@@ -145,7 +146,7 @@ const CreditCards = (props) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {paymentMethods.map(item => {
+                    {paymentMethods.length > 0 ? paymentMethods.map(item => {
                       const component = item.header ? (
                         <TableRow key={item.header}>
                           <CustomCell width='100%' colSpan={6}
@@ -193,7 +194,15 @@ const CreditCards = (props) => {
                         </Tooltip>
                       )
                       return component
-                    })}
+                    }) :
+                      <TableRow>
+                        <TableCell colSpan={6} align='center'>
+                          <Typography variant='h4' color='primary'>
+                            Loading...
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    }
                   </TableBody>
                 </Table>
               </TableContainer>

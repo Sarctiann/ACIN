@@ -8,7 +8,10 @@ import strFormat from '../tools/strFormat'
 
 const AnswerButtons = (props) => {
 
-  const { commonAnswers, ownAnswers, sysRegex, ownRegex, handleMessage } = props
+  const {
+    commonAnswers, ownAnswers, sysRegex, ownRegex, handleMessage,
+    commonStackRef, ownStackRef
+  } = props
 
   const [text, setText] = useState('')
 
@@ -86,12 +89,16 @@ const AnswerButtons = (props) => {
             <Stack spacing={1} p={1}
               sx={{ paddingBlockEnd: 2, height: '49vh', overflow: 'auto' }}
             >
-              {commonAnswers.map((ans) => {
+              {commonAnswers.length > 0 ? commonAnswers.map((ans, i) => {
+                const reference = i === 0 ? {
+                  ref: commonStackRef
+                } : {}
+
                 return (
                   <Tooltip title='Select and Copy Formatted Text' followCursor
-                  enterDelay={1000} key={ans._id.$oid}
-                >
-                    <Button fullWidth variant='contained'
+                    enterDelay={1000} key={ans._id.$oid}
+                  >
+                    <Button fullWidth variant='contained' {...reference}
                       sx={{
                         color: '#FFFFFF',
                         background: ans.color, '&:hover': {
@@ -104,7 +111,11 @@ const AnswerButtons = (props) => {
                     </Button>
                   </Tooltip>
                 )
-              })}
+              }) : 
+                <Typography variant='h5' color='primary'>
+                  Loading...
+                </Typography>
+              }
             </Stack>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -114,7 +125,12 @@ const AnswerButtons = (props) => {
             <Stack spacing={1} p={1}
               sx={{ paddingBlockEnd: 2, height: '49vh', overflow: 'auto' }}
             >
-              {ownAnswers.map((ans) => {
+              {ownAnswers.length > 0 ? ownAnswers.map((ans, i) => {
+
+                const reference = i === 0 ? {
+                  ref: ownStackRef
+                } : {}
+
                 return (
                   <Tooltip title='Select and Copy Formatted Text' followCursor
                     enterDelay={1000} key={ans._id.$oid}
@@ -126,13 +142,18 @@ const AnswerButtons = (props) => {
                           background: ans.color, filter: 'brightness(90%)'
                         }
                       }}
+                      {...reference}
                       onClick={() => handleClickAnswer(ans.content)}
                     >
                       {ans.label}
                     </Button>
                   </Tooltip>
                 )
-              })}
+              }) : 
+              <Typography variant='h5' color='primary'>
+                Loading...
+              </Typography>
+            }
             </Stack>
           </Grid>
         </Grid>

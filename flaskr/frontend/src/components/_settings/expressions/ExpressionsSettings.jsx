@@ -183,7 +183,7 @@ const ExpressionsSettings = () => {
                       paddingBlockEnd: 2, height: '38vh', overflow: 'auto'
                     }}
                   >
-                    {sysRegex.map((exp) => {
+                    {sysRegex.length > 0 ? sysRegex.map((exp) => {
                       return (
                         <Button key={exp._id.$oid} fullWidth variant='contained'
                           color='error'
@@ -192,7 +192,11 @@ const ExpressionsSettings = () => {
                           {exp.identifier}
                         </Button>
                       )
-                    })}
+                    }) :
+                    <Typography variant='h4' color='error'>
+                      Loading...
+                    </Typography>
+                    }
                   </Stack>
                 </Grid>
               }
@@ -203,7 +207,7 @@ const ExpressionsSettings = () => {
                 <Stack spacing={1} p={1}
                   sx={{ paddingBlockEnd: 2, height: '38vh', overflow: 'auto' }}
                 >
-                  {ownRegex.map((ans) => {
+                  {ownRegex.length > 0 ? ownRegex.map((ans) => {
                     return (
                       <Button key={ans._id.$oid} fullWidth variant='contained'
                         color='primary'
@@ -212,7 +216,11 @@ const ExpressionsSettings = () => {
                         {ans.identifier}
                       </Button>
                     )
-                  })}
+                  }) :
+                  <Typography variant='h4' color='primary'>
+                    Loading...
+                  </Typography>
+                  }
                 </Stack>
               </Grid>
             </Grid>

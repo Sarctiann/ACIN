@@ -76,7 +76,7 @@ const Basic = (props) => {
               </Typography>
             </Grid>
             <Grid item xs={12} md={4}>
-              <TextField fullWidth label='Price'
+              <TextField fullWidth label='Price' autoFocus
                 type='number'
                 name='price'
                 InputProps={{

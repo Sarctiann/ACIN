@@ -206,7 +206,7 @@ class Percentron:
                 Eg. 100(per) increased to 120(p) = 10%
         '''
         if per != None:
-            z = (p - per)/2
+            z = (p-per)/(1+per/100)
             return round(z, 2)
         else:
             if self.__check_per():
@@ -221,7 +221,7 @@ class Percentron:
                 Eg. 100(per) discounted to 80(p) = 10%
         '''
         if per != None:
-            z = (per - p)/2
+            z = (per-p)/(1+per/100)
             return round(z, 2)
         else:
             if self.__check_per():

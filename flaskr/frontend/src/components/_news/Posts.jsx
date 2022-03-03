@@ -122,7 +122,7 @@ const Posts = (props) => {
           const other_day = daysAgo(
             today,
             new Date(
-              date.setHours(date.getHours() + date.getTimezoneOffset()/60)
+              date.setHours(date.getHours() + date.getTimezoneOffset() / 60)
             )
           )
           if (last_day !== other_day) {
@@ -187,7 +187,7 @@ const Posts = (props) => {
                 userSettings={userSettings}
               />
             }
-            {posts?.map(element => {
+            {posts?.length > 0 ? posts?.map(element => {
               let component
               if (element.divider) {
                 component = (
@@ -260,7 +260,11 @@ const Posts = (props) => {
                 )
               }
               return component
-            })}
+            }) :
+              <Typography variant='h4' color='secondary'>
+                Loading...
+              </Typography>
+            }
           </Stack>
         </Box>
       </Grid >

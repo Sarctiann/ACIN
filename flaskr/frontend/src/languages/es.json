@@ -1,0 +1,11 @@
+{
+    "appBar": {
+        "news": "NOTICIAS",
+        "calculator": "CALCULADORA",
+        "answers": "RESPUESTAS",
+        "settings": "SETTINGS",
+        "answersSett": "AJUSTES DE RESPUESTAS",
+        "calculatorSett": "AJUSTES DE CALCULADORA",
+        "expressionsSett": "AJUSTE DE EXPRESIONES"
+    }
+}
