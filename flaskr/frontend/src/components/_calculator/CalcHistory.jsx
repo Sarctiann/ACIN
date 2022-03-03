@@ -17,7 +17,13 @@ const CalcHistory = (props) => {
 
     if (history.length > 0) {
       history.forEach(reg => {
-        const other_day = daysAgo(today, reg._id['$date'])
+        const date = new Date(reg._id['$date'])
+        const other_day = daysAgo(
+          today,
+          new Date(
+            date.setHours(date.getHours() + date.getTimezoneOffset() / 60)
+          )
+        )
         if (last_day !== other_day) {
           dividedRegistries.push({ divider: other_day })
           last_day = other_day
