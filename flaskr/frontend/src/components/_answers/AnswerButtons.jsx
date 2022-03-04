@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import {
-  Grid, Box, TextField, IconButton, Stack, Button, Typography, Tooltip
+  Grid, Box, TextField, IconButton, Stack, Button, Typography, Tooltip,
+  CircularProgress
 } from '@mui/material'
 import { ContentCopy, Cancel } from '@mui/icons-material'
 
@@ -111,9 +112,9 @@ const AnswerButtons = (props) => {
                     </Button>
                   </Tooltip>
                 )
-              }) : 
+              }) :
                 <Typography variant='h5' color='primary'>
-                  Loading...
+                  L<CircularProgress size={12} />ading ...
                 </Typography>
               }
             </Stack>
@@ -149,11 +150,11 @@ const AnswerButtons = (props) => {
                     </Button>
                   </Tooltip>
                 )
-              }) : 
-              <Typography variant='h5' color='primary'>
-                Loading...
-              </Typography>
-            }
+              }) :
+                <Typography variant='h5' color='primary'>
+                  L<CircularProgress size={12} />ading ...
+                </Typography>
+              }
             </Stack>
           </Grid>
         </Grid>

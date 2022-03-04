@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react'
 import {
   Typography, TableContainer, Table, TableRow, TableCell, TableHead, TableBody,
-  IconButton, TextField, InputAdornment, Grid, Box, Paper, Tooltip
+  IconButton, TextField, InputAdornment, Grid, Box, Paper, Tooltip,
+  CircularProgress
 } from '@mui/material'
 import { ContentCopy } from '@mui/icons-material'
 
@@ -198,7 +199,7 @@ const CreditCards = (props) => {
                       <TableRow>
                         <TableCell colSpan={6} align='center'>
                           <Typography variant='h4' color='primary'>
-                            Loading...
+                            L<CircularProgress size={17} />ading ...
                           </Typography>
                         </TableCell>
                       </TableRow>

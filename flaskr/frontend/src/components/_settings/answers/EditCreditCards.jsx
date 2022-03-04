@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import {
   Typography, TableContainer, Table, TableRow, TableCell, TableHead, TableBody,
-  IconButton, TextField, Grid, Box, Paper
+  IconButton, TextField, Grid, Box, Paper, CircularProgress
 } from '@mui/material'
 import { Done, Delete, Add, Edit, Cancel } from '@mui/icons-material'
 
@@ -457,7 +457,7 @@ const EditCreditCards = (props) => {
                         <TableRow>
                           <TableCell colSpan={7} align='center'>
                             <Typography variant='h4' color='primary'>
-                              Loading...
+                              L<CircularProgress size={17} />ading ...
                             </Typography>
                           </TableCell>
                         </TableRow>

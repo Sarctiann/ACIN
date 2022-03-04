@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   Grid, Box, TextField, IconButton, Stack, Button, Typography, Paper, Switch,
-  FormControl, FormControlLabel, MenuItem, Select
+  FormControl, FormControlLabel, MenuItem, Select, CircularProgress
 } from '@mui/material'
 import { Save, Delete, Cancel } from '@mui/icons-material'
 
@@ -208,7 +208,7 @@ const EditAnswers = (props) => {
                     )
                   }) :
                     <Typography variant='h5' color='primary'>
-                      Loading...
+                      L<CircularProgress size={12} />ading ...
                     </Typography>
                   }
                 </Stack>
@@ -236,10 +236,10 @@ const EditAnswers = (props) => {
                     </Button>
                   )
                 }) :
-                <Typography variant='h5' color='primary'>
-                  Loading...
-                </Typography>
-              }
+                  <Typography variant='h5' color='primary'>
+                    L<CircularProgress size={12} />ading ...
+                  </Typography>
+                }
               </Stack>
             </Grid>
           </Grid>

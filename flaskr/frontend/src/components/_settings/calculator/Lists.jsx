@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import {
   Grid, Paper, Box, Table, TableHead, TableBody, TableRow, TableCell,
-  Button, IconButton, Typography
+  Button, IconButton, Typography, CircularProgress
 } from '@mui/material'
 import { ArrowUpward, Download, Delete } from '@mui/icons-material'
 import axios from 'axios'
@@ -236,7 +236,7 @@ const Lists = (props) => {
                       <TableRow>
                         <TableCell colSpan={3} align='center'>
                           <Typography variant='h4' color='primary'>
-                            Loading...
+                            L<CircularProgress size={17} />ading ...
                           </Typography>
                         </TableCell>
                       </TableRow>

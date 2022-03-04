@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import {
   Grid, Paper, Box, Table, TableHead, TableBody, TableRow, TableCell,
-  IconButton, TextField, Button, Typography
+  IconButton, TextField, Button, Typography, CircularProgress
 } from '@mui/material'
 import {
   Done, Cancel, Edit, Delete
@@ -210,7 +210,7 @@ const Items = (props) => {
                 <TableRow>
                   <TableCell colSpan={4} align='center'>
                     <Typography variant='h4' color='primary'>
-                      Loading...
+                      L<CircularProgress size={17} />ading ...
                     </Typography>
                   </TableCell>
                 </TableRow>
