@@ -1,4 +1,4 @@
-var hostname = 'https://audiocenter-in.herokuapp.com/'
+var hostname = 'https://audiocenter-in-sarc.herokuapp.com/'
 
 var globalFontSize = 13
 
