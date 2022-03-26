@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: "off" */
+
 var hostname = 'https://audiocenter-in-sarc.herokuapp.com/'
 
 var globalFontSize = 13
