@@ -1,6 +1,6 @@
 /* eslint no-unused-vars: "off" */
 
-var hostname = 'https://audiocenter-in.herokuapp.com'
+var hostname = 'https://audiocenter-in.herokuapp.com/'
 
 var globalFontSize = 13
 
