@@ -12,6 +12,7 @@ def create_app(config_objet='flaskr.settings'):
         static_folder='frontend/build/'
     )
     app.config.from_object(config_objet)
+    app.url_map.strict_slashes = False
 
     JWT.init_app(app)
     DB.init_app(app)
