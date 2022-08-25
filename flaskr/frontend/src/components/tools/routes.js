@@ -18,6 +18,6 @@ const host = {
   production: window.hostname
 }[process.env.NODE_ENV]
 
-const api_root = '/api-v1'
+const api_root = 'api-v1'
 
 export const api_url = host + api_root
